@@ -56,13 +56,21 @@ class SampleListener extends Listener {
             if (!fingers.isEmpty()) {
                 // Calculate the hand's average finger tip position
                 Vector avgPos = Vector.zero();
+                List<Integer> fingerIds = new LinkedList<>();
                 for (Finger finger : fingers) {
                     avgPos = avgPos.plus(finger.tipPosition());
+                    if(finger.isValid() && finger.isFinger()){
+                        fingerIds.add(finger.id());
+                    }
                 }
                 avgPos = avgPos.divide(fingers.count());
                 System.out.println("Hand has " + fingers.count()
                                  + " fingers, average finger tip position: " + avgPos);
+                System.out.println("Hand has fingers with ids: "+fingerIds);
+                
             }
+            
+            
 
             // Get the hand's sphere radius and palm position
             System.out.println("Hand sphere radius: " + hand.sphereRadius()
@@ -76,6 +84,8 @@ class SampleListener extends Listener {
             System.out.println("Hand pitch: " + Math.toDegrees(direction.pitch()) + " degrees, "
                              + "roll: " + Math.toDegrees(normal.roll()) + " degrees, "
                              + "yaw: " + Math.toDegrees(direction.yaw()) + " degrees");
+            
+            
         }
 
         GestureList gestures = frame.gestures();
