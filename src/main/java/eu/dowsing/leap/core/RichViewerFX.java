@@ -66,8 +66,7 @@ import com.leapmotion.leap.Gesture;
 import com.sun.javafx.robot.FXRobot;
 import com.sun.javafx.robot.FXRobotFactory;
 
-import eu.dowsing.leap.experiments.SimpleLeapListener;
-import eu.dowsing.leap.experiments.SimpleLeapListener.Gestures;
+import eu.dowsing.leap.core.GesturesListener.Swipe;
 import eu.dowsing.leap.gesture.DoubleHandListener;
 
 public class RichViewerFX extends Application {
@@ -150,7 +149,9 @@ public class RichViewerFX extends Application {
     // resolutions
     int                        FXscaling           = 1;
 
-    private SimpleLeapListener listener            = new SimpleLeapListener();
+    private RichLeapListener   pointlistener       = new RichLeapListener();
+    private GesturesListener   gesturelistener     = new GesturesListener();
+    private HandSignListener   handSignlistener    = new HandSignListener();
     private DoubleHandListener doubleListener      = new DoubleHandListener();
     private Controller         leapController      = new Controller();
 
@@ -198,7 +199,9 @@ public class RichViewerFX extends Application {
     }
 
     private void setupLeap() {
-        leapController.addListener(listener);
+        leapController.addListener(pointlistener);
+        leapController.addListener(gesturelistener);
+        leapController.addListener(handSignlistener);
         leapController.addListener(doubleListener);
 
         leapController.enableGesture(Gesture.Type.TYPE_SWIPE);
@@ -208,38 +211,44 @@ public class RichViewerFX extends Application {
         // root.getChildren().add(circle);
         // final Scene scene = new Scene(root, 800, 600);
 
-        listener.pointProperty().addListener(new ChangeListener<Point2D>() {
-            @Override
-            public void changed(ObservableValue ov, Point2D t, final Point2D t1) {
-                Platform.runLater(new Runnable() {
+        pointlistener.pointProperty().addListener(
+                new ChangeListener<Point2D>() {
                     @Override
-                    public void run() {
+                    public void changed(ObservableValue ov, Point2D t,
+                            final Point2D t1) {
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
 
+                            }
+                        });
                     }
                 });
-            }
-        });
+        gesturelistener.gestureProperty().addListener(
+                new ChangeListener<Swipe>() {
 
-        listener.gestureProperty().addListener(new ChangeListener<Gestures>() {
-
-            @Override
-            public void changed(ObservableValue<? extends Gestures> observable,
-                    Gestures oldValue, final Gestures newValue) {
-                Platform.runLater(new Runnable() {
                     @Override
-                    public void run() {
-                        if (newValue.getSwiped()) {
-                            System.out.println("Swiped!!! at Observer");
-                            FXRobot robot = FXRobotFactory.createRobot(scene);
-                            robot.keyPress(javafx.scene.input.KeyCode.LEFT);
-                            openNextPage();
-                        }
+                    public void changed(
+                            ObservableValue<? extends Swipe> observable,
+                            Swipe oldValue, final Swipe newValue) {
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (newValue == Swipe.LEFT) {
+                                    FXRobot robot = FXRobotFactory
+                                            .createRobot(scene);
+                                    robot.keyPress(javafx.scene.input.KeyCode.LEFT);
+                                    openNextPage();
+                                } else if (newValue == Swipe.RIGHT) {
+                                    openPreviousPage();
+                                }
+                            }
+                        });
+
                     }
+
                 });
 
-            }
-
-        });
     }
 
     public Scene setupViewer(int w, int h) {
@@ -563,7 +572,6 @@ public class RichViewerFX extends Application {
     }
 
     private void openNextPage() {
-        System.out.println("Maybe open next page");
         if (currentPage < pdf.getPageCount()) {
             currentPage++;
             decodePage();
@@ -574,7 +582,6 @@ public class RichViewerFX extends Application {
     }
 
     private void openPreviousPage() {
-        System.out.println("Maybe open previous page");
         if (currentPage > 1) {
             currentPage--;
             decodePage();

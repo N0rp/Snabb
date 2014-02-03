@@ -76,21 +76,25 @@ public class DoubleHandListener extends Listener {
         }
 
         // Calculate the hand's pitch, roll, and yaw angles
-        System.out
-                .println("Hand finger count: " + hand.fingers().count() + " and " + invalidFingers
-                        + " are invalid. Hand pitch: " + Math.toDegrees(direction.pitch()) + " degrees, " + "roll: "
-                        + Math.toDegrees(normal.roll()) + " degrees, " + "yaw: " + Math.toDegrees(direction.yaw())
-                        + " degrees");
+        // System.out
+        // .println("Hand finger count: " + hand.fingers().count() + " and " +
+        // invalidFingers
+        // + " are invalid. Hand pitch: " + Math.toDegrees(direction.pitch()) +
+        // " degrees, " + "roll: "
+        // + Math.toDegrees(normal.roll()) + " degrees, " + "yaw: " +
+        // Math.toDegrees(direction.yaw())
+        // + " degrees");
 
         if (hand.fingers().isEmpty()) {
             // if no fingers are visible
             handMap.put(hand.id(), HandForm.ROCK);
-            System.out.println("Hand is rock");
+            // System.out.println("Hand is rock");
         } else if (hand.fingers().count() == 5) {
             handMap.put(hand.id(), HandForm.PAPER);
-            System.out.println("Hand is paper");
+            // System.out.println("Hand is paper");
         } else {
-            System.out.println("Hand is undefined, fingers found : " + hand.fingers().count() + ". ");
+            // System.out.println("Hand is undefined, fingers found : " +
+            // hand.fingers().count() + ". ");
             handMap.put(hand.id(), HandForm.UNDEFINED);
         }
     }
