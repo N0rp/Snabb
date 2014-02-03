@@ -17,7 +17,7 @@ import com.leapmotion.leap.Vector;
 
 public class SimpleLeapListener extends Listener {
 
-    protected class Gestures {
+    public class Gestures {
         private boolean hasSwiped = false;
 
         public Gestures(boolean swiped) {
@@ -30,7 +30,7 @@ public class SimpleLeapListener extends Listener {
 
     }
 
-    private ObjectProperty<Point2D> point = new SimpleObjectProperty<>();
+    private ObjectProperty<Point2D>  point   = new SimpleObjectProperty<>();
 
     private ObjectProperty<Gestures> gestury = new SimpleObjectProperty<>();
 
@@ -56,9 +56,13 @@ public class SimpleLeapListener extends Listener {
                 Hand hand = frame.hands().get(0);
                 if (hand.isValid()) {
                     // hand.palmPosition()
-                    Vector intersect = screen.intersect(hand.palmPosition(), hand.direction(), true);
-                    point.setValue(new Point2D(screen.widthPixels() * Math.min(1d, Math.max(0d, intersect.getX())),
-                            screen.heightPixels() * Math.min(1d, Math.max(0d, (1d - intersect.getY())))));
+                    Vector intersect = screen.intersect(hand.palmPosition(),
+                            hand.direction(), true);
+                    point.setValue(new Point2D(screen.widthPixels()
+                            * Math.min(1d, Math.max(0d, intersect.getX())),
+                            screen.heightPixels()
+                                    * Math.min(1d, Math.max(0d,
+                                            (1d - intersect.getY())))));
                 }
 
                 // look for gestures
@@ -67,12 +71,12 @@ public class SimpleLeapListener extends Listener {
                     Gesture gesture = gestures.get(i);
 
                     switch (gesture.type()) {
-                        case TYPE_SWIPE:
-                            gestury.setValue(new Gestures(true));
-                            break;
-                        default:
+                    case TYPE_SWIPE:
+                        gestury.setValue(new Gestures(true));
+                        break;
+                    default:
 
-                            break;
+                        break;
                     }
                 }
             }
