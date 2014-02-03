@@ -1,6 +1,5 @@
 package eu.dowsing.leap.experiments;
 
-import java.io.File;
 import java.io.IOException;
 
 import javafx.application.Application;
@@ -10,15 +9,9 @@ import javafx.beans.value.ObservableValue;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
-
-import org.jopendocument.dom.ODPackage;
-import org.jopendocument.dom.ODSingleXMLDocument;
-import org.jpedal.PdfDecoder;
-import org.jpedal.exception.PdfException;
 
 import com.leapmotion.leap.Controller;
 import com.leapmotion.leap.Gesture;
@@ -31,32 +24,47 @@ import eu.dowsing.leap.storage.MainProperties;
 import eu.dowsing.leap.storage.MainProperties.Key;
 
 public class LeapJavaFX extends Application {
-    private final AudioClip ALERT_AUDIOCLIP;
+    // private final AudioClip ALERT_AUDIOCLIP;
 
-    private SimpleLeapListener listener = new SimpleLeapListener();
-    private DoubleHandListener doubleListener = new DoubleHandListener();
-    private Controller leapController = new Controller();
+    private SimpleLeapListener listener        = new SimpleLeapListener();
+    private DoubleHandListener doubleListener  = new DoubleHandListener();
+    private Controller         leapController  = new Controller();
 
-    private AnchorPane root = new AnchorPane();
-    private Circle circle = new Circle(50, Color.DEEPSKYBLUE);
+    private AnchorPane         root            = new AnchorPane();
+    private Circle             circle          = new Circle(50,
+                                                       Color.DEEPSKYBLUE);
 
-    private MainProperties mainPropManager = MainProperties.getInstance();
+    private MainProperties     mainPropManager = MainProperties.getInstance();
 
     public LeapJavaFX() {
-        File f = new File(mainPropManager.getProperty(Key.BEEP_SOUND));
-        ALERT_AUDIOCLIP = new AudioClip("file://" + f.getAbsolutePath());
+        // File f = new File(mainPropManager.getProperty(Key.BEEP_SOUND));
+        // System.out.println("Absolute file path is : " + f.getAbsolutePath());
+        // ALERT_AUDIOCLIP = new AudioClip("file://" + f.getAbsolutePath());
     }
 
     @Override
     public void start(Stage primaryStage) {
+        circle.setLayoutX(circle.getRadius());
+        circle.setLayoutY(circle.getRadius());
+        root.getChildren().add(circle);
+        final Scene scene = new Scene(root, 800, 600);
 
-        PdfDecoder pdf = new PdfDecoder();
-        try {
-            pdf.openPdfFile("res/doc/Test.pdf");
-        } catch (PdfException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        starty(primaryStage, scene);
+
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    private void starty(final Stage primaryStage, final Scene scene) {
+
+        // PdfDecoder pdf = new PdfDecoder();
+        //
+        // try {
+        // pdf.openPdfFile("res/doc/Test.pdf");
+        // } catch (PdfException e) {
+        // // TODO Auto-generated catch block
+        // e.printStackTrace();
+        // }
         // showPage(1);
 
         String musicLocation = mainPropManager.getProperty(Key.MUSIC_LOCATION);
@@ -67,10 +75,10 @@ public class LeapJavaFX extends Application {
 
         leapController.enableGesture(Gesture.Type.TYPE_SWIPE);
 
-        circle.setLayoutX(circle.getRadius());
-        circle.setLayoutY(circle.getRadius());
-        root.getChildren().add(circle);
-        final Scene scene = new Scene(root, 800, 600);
+        // circle.setLayoutX(circle.getRadius());
+        // circle.setLayoutY(circle.getRadius());
+        // root.getChildren().add(circle);
+        // final Scene scene = new Scene(root, 800, 600);
 
         listener.pointProperty().addListener(new ChangeListener<Point2D>() {
             @Override
@@ -78,11 +86,17 @@ public class LeapJavaFX extends Application {
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        Point2D d = root.sceneToLocal(t1.getX() - scene.getX() - scene.getWindow().getX(), t1.getY()
-                                - scene.getY() - scene.getWindow().getY());
+                        Point2D d = root.sceneToLocal(t1.getX() - scene.getX()
+                                - scene.getWindow().getX(),
+                                t1.getY() - scene.getY()
+                                        - scene.getWindow().getY());
                         double dx = d.getX(), dy = d.getY();
-                        if (dx >= 0d && dx <= root.getWidth() - 2d * circle.getRadius() && dy >= 0d
-                                && dy <= root.getHeight() - 2d * circle.getRadius()) {
+                        if (dx >= 0d
+                                && dx <= root.getWidth() - 2d
+                                        * circle.getRadius()
+                                && dy >= 0d
+                                && dy <= root.getHeight() - 2d
+                                        * circle.getRadius()) {
                             circle.setTranslateX(dx);
                             circle.setTranslateY(dy);
                         }
@@ -94,19 +108,20 @@ public class LeapJavaFX extends Application {
         listener.gestureProperty().addListener(new ChangeListener<Gestures>() {
 
             @Override
-            public void changed(ObservableValue<? extends Gestures> observable, Gestures oldValue, Gestures newValue) {
+            public void changed(ObservableValue<? extends Gestures> observable,
+                    Gestures oldValue, Gestures newValue) {
                 if (newValue.getSwiped()) {
                     System.out.println("Swiped!!! at Observer");
                     FXRobot robot = FXRobotFactory.createRobot(scene);
                     robot.keyPress(javafx.scene.input.KeyCode.LEFT);
-                    ALERT_AUDIOCLIP.play();
+                    // ALERT_AUDIOCLIP.play();
                 }
             }
 
         });
 
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        // primaryStage.setScene(scene);
+        // primaryStage.show();
     }
 
     @Override
@@ -117,8 +132,8 @@ public class LeapJavaFX extends Application {
 
     public static void main(String[] args) throws IOException {
         System.out.println("Load Presentation");
-        ODPackage p = new ODPackage(new File("res/doc/Test.odp"));
-        ODSingleXMLDocument doc = p.toSingle();
+        // ODPackage p = new ODPackage(new File("res/doc/Test.odp"));
+        // ODSingleXMLDocument doc = p.toSingle();
 
         // System.out.println("Load Spreadsheet");
         // final OpenDocument spread = new OpenDocument();

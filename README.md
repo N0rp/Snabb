@@ -10,3 +10,9 @@ mvn org.apache.maven.plugins:maven-install-plugin:2.3.1:install-file \
     -Dversion=1.0.0 -Dpackaging=jar
 
 Afterwards add Leap Native Library to the java build path
+
+--------------------
+Notes
+------------------
+### Errors
+ * Unsatisfied Link Error can happen when the javaFX runtime is not correct. Then include your own found under Java/jdk1.7.0_45/jre/lib
