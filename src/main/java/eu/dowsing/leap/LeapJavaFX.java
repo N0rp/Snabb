@@ -19,8 +19,8 @@ import com.sun.javafx.robot.FXRobot;
 import com.sun.javafx.robot.FXRobotFactory;
 
 import eu.dowsing.leap.Browser.UrlLocation;
-import eu.dowsing.leap.experiments.SimpleLeapListener;
-import eu.dowsing.leap.experiments.SimpleLeapListener.Gestures;
+import eu.dowsing.leap.SimpleLeapListener.Direction;
+import eu.dowsing.leap.SimpleLeapListener.Gestures;
 import eu.dowsing.leap.gesture.DoubleHandListener;
 import eu.dowsing.leap.storage.MainProperties;
 import eu.dowsing.leap.storage.MainProperties.Key;
@@ -51,15 +51,18 @@ public class LeapJavaFX extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        // init leap
+        leapController.addListener(listener);
+        leapController.addListener(doubleListener);
+
+        leapController.enableGesture(Gesture.Type.TYPE_SWIPE);
+
+        // init view
         Scene scene = null;
         if (visualize == Visualize.Leap) {
-            primaryStage.setTitle("Leaps View");
-
-            circle.setLayoutX(circle.getRadius());
-            circle.setLayoutY(circle.getRadius());
-            root.getChildren().add(circle);
+            primaryStage.setTitle("Leap Test View");
+            loadCircleDisplay(scene);
             scene = new Scene(root, 800, 600);
-            starty(scene);
         } else if (visualize == Visualize.Presentation) {
             // create the scene
             primaryStage.setTitle("Presentation");
@@ -67,30 +70,32 @@ public class LeapJavaFX extends Application {
             scene = new Scene(new Browser(Browser.LOCAL_PRES, UrlLocation.Local), 750, 500, Color.web("#666970"));
         }
 
+        loadMusic();
+        initLeap(scene);
+
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
-    private void starty(final Scene scene) {
+    private void loadPdf() {
 
         // PdfDecoder pdf = new PdfDecoder();
         //
         // try {
-        // pdf.openPdfFile("res/doc/Test.pdf");
+        // pdf.openPdfFile("res/doc/Teshttp://open.spotify.com/track/7FoMWu6ddV7qMP7itqWoLEt.pdf");
         // } catch (PdfException e) {
         // // TODO Auto-generated catch block
         // e.printStackTrace();
         // }
         // showPage(1);
 
-        String musicLocation = mainPropManager.getProperty(Key.MUSIC_LOCATION);
-        System.out.println("Music is located in: " + musicLocation);
-        // leapController.addListener(listener);
-        leapController.addListener(listener);
-        leapController.addListener(doubleListener);
+    }
 
-        leapController.enableGesture(Gesture.Type.TYPE_SWIPE);
+    private void loadCircleDisplay(final Scene scene) {
 
+        circle.setLayoutX(circle.getRadius());
+        circle.setLayoutY(circle.getRadius());
+        root.getChildren().add(circle);
         // circle.setLayoutX(circle.getRadius());
         // circle.setLayoutY(circle.getRadius());
         // root.getChildren().add(circle);
@@ -114,19 +119,30 @@ public class LeapJavaFX extends Application {
                 });
             }
         });
+    }
 
+    private void loadMusic() {
+        String musicLocation = mainPropManager.getProperty(Key.MUSIC_LOCATION);
+        System.out.println("Music is located in: " + musicLocation);
+    }
+
+    private void initLeap(final Scene scene) {
         listener.gestureProperty().addListener(new ChangeListener<Gestures>() {
 
             @Override
             public void changed(ObservableValue<? extends Gestures> observable, Gestures oldValue, Gestures newValue) {
-                if (newValue.getSwiped()) {
-                    System.out.println("Swiped!!! at Observer");
+                if (newValue.getDirection() == Direction.LEFT) {
+                    System.out.println("Swiped Left!!! at Observer");
                     FXRobot robot = FXRobotFactory.createRobot(scene);
                     robot.keyPress(javafx.scene.input.KeyCode.LEFT);
                     // ALERT_AUDIOCLIP.play();
+                } else if (newValue.getDirection() == Direction.LEFT) {
+                    System.out.println("Swiped Right!!! at Observer");
+                    FXRobot robot = FXRobotFactory.createRobot(scene);
+                    robot.keyPress(javafx.scene.input.KeyCode.RIGHT);
+                    // ALERT_AUDIOCLIP.play();
                 }
             }
-
         });
 
     }

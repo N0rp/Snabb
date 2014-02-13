@@ -34,11 +34,12 @@ public class Browser extends Region {
         // apply the styles
         getStyleClass().add("browser");
         if (location == UrlLocation.Local) {
+            loadFile(url);
+        } else if (location == UrlLocation.Web) {
             // load the web page
             loadWeb(url);
-        } else if (location == UrlLocation.Web) {
-            loadFile(url);
         }
+
         // loadFile(LOCAL_BORED);
         // loadFile(LOCAL_PRES);
         // add the web view to the scene
