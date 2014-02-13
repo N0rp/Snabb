@@ -1,4 +1,4 @@
-package eu.dowsing.leap.experiments;
+package eu.dowsing.leap;
 
 import java.io.IOException;
 
@@ -18,6 +18,8 @@ import com.leapmotion.leap.Gesture;
 import com.sun.javafx.robot.FXRobot;
 import com.sun.javafx.robot.FXRobotFactory;
 
+import eu.dowsing.leap.Browser.UrlLocation;
+import eu.dowsing.leap.experiments.SimpleLeapListener;
 import eu.dowsing.leap.experiments.SimpleLeapListener.Gestures;
 import eu.dowsing.leap.gesture.DoubleHandListener;
 import eu.dowsing.leap.storage.MainProperties;
@@ -26,15 +28,14 @@ import eu.dowsing.leap.storage.MainProperties.Key;
 public class LeapJavaFX extends Application {
     // private final AudioClip ALERT_AUDIOCLIP;
 
-    private SimpleLeapListener listener        = new SimpleLeapListener();
-    private DoubleHandListener doubleListener  = new DoubleHandListener();
-    private Controller         leapController  = new Controller();
+    private SimpleLeapListener listener = new SimpleLeapListener();
+    private DoubleHandListener doubleListener = new DoubleHandListener();
+    private Controller leapController = new Controller();
 
-    private AnchorPane         root            = new AnchorPane();
-    private Circle             circle          = new Circle(50,
-                                                       Color.DEEPSKYBLUE);
+    private AnchorPane root = new AnchorPane();
+    private Circle circle = new Circle(50, Color.DEEPSKYBLUE);
 
-    private MainProperties     mainPropManager = MainProperties.getInstance();
+    private MainProperties mainPropManager = MainProperties.getInstance();
 
     public LeapJavaFX() {
         // File f = new File(mainPropManager.getProperty(Key.BEEP_SOUND));
@@ -42,20 +43,35 @@ public class LeapJavaFX extends Application {
         // ALERT_AUDIOCLIP = new AudioClip("file://" + f.getAbsolutePath());
     }
 
+    private enum Visualize {
+        Leap, Presentation
+    }
+
+    private Visualize visualize = Visualize.Presentation;
+
     @Override
     public void start(Stage primaryStage) {
-        circle.setLayoutX(circle.getRadius());
-        circle.setLayoutY(circle.getRadius());
-        root.getChildren().add(circle);
-        final Scene scene = new Scene(root, 800, 600);
+        Scene scene = null;
+        if (visualize == Visualize.Leap) {
+            primaryStage.setTitle("Leaps View");
 
-        starty(primaryStage, scene);
+            circle.setLayoutX(circle.getRadius());
+            circle.setLayoutY(circle.getRadius());
+            root.getChildren().add(circle);
+            scene = new Scene(root, 800, 600);
+            starty(scene);
+        } else if (visualize == Visualize.Presentation) {
+            // create the scene
+            primaryStage.setTitle("Presentation");
+
+            scene = new Scene(new Browser(Browser.LOCAL_PRES, UrlLocation.Local), 750, 500, Color.web("#666970"));
+        }
 
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
-    private void starty(final Stage primaryStage, final Scene scene) {
+    private void starty(final Scene scene) {
 
         // PdfDecoder pdf = new PdfDecoder();
         //
@@ -86,17 +102,11 @@ public class LeapJavaFX extends Application {
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        Point2D d = root.sceneToLocal(t1.getX() - scene.getX()
-                                - scene.getWindow().getX(),
-                                t1.getY() - scene.getY()
-                                        - scene.getWindow().getY());
+                        Point2D d = root.sceneToLocal(t1.getX() - scene.getX() - scene.getWindow().getX(), t1.getY()
+                                - scene.getY() - scene.getWindow().getY());
                         double dx = d.getX(), dy = d.getY();
-                        if (dx >= 0d
-                                && dx <= root.getWidth() - 2d
-                                        * circle.getRadius()
-                                && dy >= 0d
-                                && dy <= root.getHeight() - 2d
-                                        * circle.getRadius()) {
+                        if (dx >= 0d && dx <= root.getWidth() - 2d * circle.getRadius() && dy >= 0d
+                                && dy <= root.getHeight() - 2d * circle.getRadius()) {
                             circle.setTranslateX(dx);
                             circle.setTranslateY(dy);
                         }
@@ -108,8 +118,7 @@ public class LeapJavaFX extends Application {
         listener.gestureProperty().addListener(new ChangeListener<Gestures>() {
 
             @Override
-            public void changed(ObservableValue<? extends Gestures> observable,
-                    Gestures oldValue, Gestures newValue) {
+            public void changed(ObservableValue<? extends Gestures> observable, Gestures oldValue, Gestures newValue) {
                 if (newValue.getSwiped()) {
                     System.out.println("Swiped!!! at Observer");
                     FXRobot robot = FXRobotFactory.createRobot(scene);
@@ -120,8 +129,6 @@ public class LeapJavaFX extends Application {
 
         });
 
-        // primaryStage.setScene(scene);
-        // primaryStage.show();
     }
 
     @Override

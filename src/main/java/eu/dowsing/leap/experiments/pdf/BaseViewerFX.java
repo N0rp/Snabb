@@ -24,7 +24,7 @@
  * ---------------
  */
 
-package eu.dowsing.leap.experiments;
+package eu.dowsing.leap.experiments.pdf;
 
 import java.io.File;
 import java.util.List;
