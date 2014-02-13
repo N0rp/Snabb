@@ -1,0 +1,180 @@
+{
+  "slides": [
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 341.3333333333333,
+          "y": 256,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "text": "Test",
+          "size": 72,
+          "selected": false
+        }
+      ],
+      "z": 0,
+      "impScale": 3,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0,
+      "index": 0,
+      "selected": false,
+      "active": false,
+      "x": 180,
+      "y": 180
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 341.3333333333333,
+          "y": 256,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "text": "Foobar",
+          "size": 72,
+          "selected": false
+        }
+      ],
+      "z": 0,
+      "impScale": 3,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 1.57,
+      "index": 1,
+      "selected": false,
+      "active": false,
+      "x": 374,
+      "y": 377
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 341.3333333333333,
+          "y": 256,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "text": "Moar Text<br>",
+          "size": 72,
+          "selected": false
+        }
+      ],
+      "z": 0,
+      "impScale": 3,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0,
+      "index": 2,
+      "selected": false,
+      "active": false,
+      "surface": "bg-surf-grad-yellow",
+      "background": "bg-solid-light",
+      "markdown": "",
+      "x": 299,
+      "y": 263
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 341.3333333333333,
+          "y": 256,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "text": "Umpalumpa",
+          "size": 72,
+          "selected": false
+        }
+      ],
+      "z": 0,
+      "impScale": 3,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 3.14,
+      "index": 3,
+      "selected": true,
+      "active": false,
+      "markdown": "",
+      "x": 561,
+      "y": 179
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 133,
+          "y": 94,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "text": "Helloooo!!!",
+          "size": 72,
+          "selected": true
+        }
+      ],
+      "z": 0,
+      "impScale": 3,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 4.71,
+      "index": 4,
+      "selected": true,
+      "active": true,
+      "markdown": "",
+      "x": 618,
+      "y": 340
+    }
+  ],
+  "activeSlide": {
+    "components": [
+      {
+        "TextBox": {},
+        "x": 133,
+        "y": 94,
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "type": "TextBox",
+        "text": "Helloooo!!!",
+        "size": 72,
+        "selected": true
+      }
+    ],
+    "z": 0,
+    "impScale": 3,
+    "rotateX": 0,
+    "rotateY": 0,
+    "rotateZ": 4.71,
+    "index": 4,
+    "selected": true,
+    "active": true,
+    "markdown": "",
+    "x": 618,
+    "y": 340
+  },
+  "fileName": "Temp",
+  "deckVersion": "1.0",
+  "cannedTransition": "coverflow",
+  "customBackgrounds": {
+    "bgs": []
+  },
+  "overviewX": 399,
+  "overviewY": 278
+}
