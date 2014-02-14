@@ -20,7 +20,7 @@ import com.sun.javafx.robot.FXRobotFactory;
 
 import eu.dowsing.leap.Browser.UrlLocation;
 import eu.dowsing.leap.SimpleLeapListener.Direction;
-import eu.dowsing.leap.SimpleLeapListener.Gestures;
+import eu.dowsing.leap.SimpleLeapListener.Swipy;
 import eu.dowsing.leap.gesture.DoubleHandListener;
 import eu.dowsing.leap.storage.MainProperties;
 import eu.dowsing.leap.storage.MainProperties.Key;
@@ -56,6 +56,9 @@ public class LeapJavaFX extends Application {
         leapController.addListener(doubleListener);
 
         leapController.enableGesture(Gesture.Type.TYPE_SWIPE);
+        if (leapController.config().setFloat("Gesture.Swipe.MinLength", 100)
+                && leapController.config().setFloat("Gesture.Swipe.MinVelocity", 250))
+            leapController.config().save();
 
         // init view
         Scene scene = null;
@@ -127,20 +130,23 @@ public class LeapJavaFX extends Application {
     }
 
     private void initLeap(final Scene scene) {
-        listener.gestureProperty().addListener(new ChangeListener<Gestures>() {
+        listener.gestureProperty().addListener(new ChangeListener<Swipy>() {
 
             @Override
-            public void changed(ObservableValue<? extends Gestures> observable, Gestures oldValue, Gestures newValue) {
-                if (newValue.getDirection() == Direction.LEFT) {
-                    System.out.println("Swiped Left!!! at Observer");
-                    FXRobot robot = FXRobotFactory.createRobot(scene);
-                    robot.keyPress(javafx.scene.input.KeyCode.LEFT);
-                    // ALERT_AUDIOCLIP.play();
-                } else if (newValue.getDirection() == Direction.LEFT) {
-                    System.out.println("Swiped Right!!! at Observer");
-                    FXRobot robot = FXRobotFactory.createRobot(scene);
-                    robot.keyPress(javafx.scene.input.KeyCode.RIGHT);
-                    // ALERT_AUDIOCLIP.play();
+            public void changed(ObservableValue<? extends Swipy> observable, Swipy oldValue, Swipy newValue) {
+                if (newValue.isSwiped()) {
+                    System.out.println("Fpund swip gesture");
+                    if (newValue.getDirection() == Direction.LEFT) {
+                        System.out.println("Swiped Left!!! at Observer");
+                        FXRobot robot = FXRobotFactory.createRobot(scene);
+                        robot.keyPress(javafx.scene.input.KeyCode.LEFT);
+                        // ALERT_AUDIOCLIP.play();
+                    } else if (newValue.getDirection() == Direction.LEFT) {
+                        System.out.println("Swiped Right!!! at Observer");
+                        FXRobot robot = FXRobotFactory.createRobot(scene);
+                        robot.keyPress(javafx.scene.input.KeyCode.RIGHT);
+                        // ALERT_AUDIOCLIP.play();
+                    }
                 }
             }
         });

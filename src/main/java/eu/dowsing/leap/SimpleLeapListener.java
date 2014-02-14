@@ -10,7 +10,6 @@ import com.leapmotion.leap.Frame;
 import com.leapmotion.leap.Gesture;
 import com.leapmotion.leap.GestureList;
 import com.leapmotion.leap.Hand;
-import com.leapmotion.leap.HandList;
 import com.leapmotion.leap.Listener;
 import com.leapmotion.leap.Screen;
 import com.leapmotion.leap.SwipeGesture;
@@ -22,10 +21,17 @@ public class SimpleLeapListener extends Listener {
         LEFT, RIGHT
     }
 
-    public class Gestures {
+    public class Swipy {
         private Direction dir;
 
-        public Gestures(Direction dir) {
+        private boolean swiped = false;
+
+        public Swipy() {
+            this.swiped = false;
+        }
+
+        public Swipy(Direction dir) {
+            this.swiped = true;
             this.dir = dir;
         }
 
@@ -33,26 +39,26 @@ public class SimpleLeapListener extends Listener {
             return dir;
         }
 
+        public boolean isSwiped() {
+            return this.swiped;
+        }
+
     }
 
     private ObjectProperty<Point2D> point = new SimpleObjectProperty<>();
 
-    private ObjectProperty<Gestures> gestury = new SimpleObjectProperty<>();
+    private ObjectProperty<Swipy> gestury = new SimpleObjectProperty<>();
 
     public ObservableValue<Point2D> pointProperty() {
         return point;
     }
 
-    public ObjectProperty<Gestures> gestureProperty() {
+    public ObjectProperty<Swipy> gestureProperty() {
         return gestury;
     }
 
     @Override
     public void onFrame(Controller controller) {
-        Frame tmpFrame = new Frame();
-        Hand tmpHand = new Hand();
-
-        HandList tmpHandList = new HandList();
 
         Frame frame = controller.frame();
         if (!frame.hands().isEmpty()) {
@@ -68,25 +74,27 @@ public class SimpleLeapListener extends Listener {
 
                 // look for gestures
                 GestureList gestures = frame.gestures();
+                boolean foundSwipe = false;
                 for (int i = 0; i < gestures.count(); i++) {
                     Gesture gesture = gestures.get(i);
-
                     switch (gesture.type()) {
                         case TYPE_SWIPE:
-                            SwipeGesture swipe = new SwipeGesture(gesture);
-                            System.out.println("Swipe id: " + swipe.id() + ", " + swipe.state() + ", position: "
-                                    + swipe.position() + ", direction: " + swipe.direction() + ", speed: "
-                                    + swipe.speed() + ", duration: " + swipe.duration());
-                            if (swipe.state().equals("STATE_STOP")) {
+                            if (gesture.state() == Gesture.State.STATE_STOP) {
+                                SwipeGesture swipe = new SwipeGesture(gesture);
+                                System.out.println("Swipe id: " + swipe.id() + ", " + swipe.state() + ", position: "
+                                        + swipe.position() + ", direction: " + swipe.direction() + ", speed: "
+                                        + swipe.speed() + ", duration: " + swipe.duration());
+
+                                foundSwipe = true;
                                 System.out.println("Swipe done");
                                 if (swipe.direction().getX() > 0) {
                                     // swipe right
                                     System.out.println("Right");
-                                    gestury.setValue(new Gestures(Direction.RIGHT));
+                                    gestury.setValue(new Swipy(Direction.RIGHT));
                                 } else if (swipe.direction().getX() < 0) {
                                     // swipe left
                                     System.out.println("Left");
-                                    gestury.setValue(new Gestures(Direction.LEFT));
+                                    gestury.setValue(new Swipy(Direction.LEFT));
                                 }
                             }
                             break;
@@ -94,6 +102,9 @@ public class SimpleLeapListener extends Listener {
 
                             break;
                     }
+                }
+                if (!foundSwipe) {
+                    gestury.set(new Swipy());
                 }
             }
         }
