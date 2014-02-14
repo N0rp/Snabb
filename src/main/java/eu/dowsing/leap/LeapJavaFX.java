@@ -8,6 +8,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Point2D;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -15,6 +16,7 @@ import javafx.stage.Stage;
 
 import com.leapmotion.leap.Controller;
 import com.leapmotion.leap.Gesture;
+import com.sun.glass.ui.Robot;
 import com.sun.javafx.robot.FXRobot;
 import com.sun.javafx.robot.FXRobotFactory;
 
@@ -49,6 +51,8 @@ public class LeapJavaFX extends Application {
 
     private Visualize visualize = Visualize.Presentation;
 
+    private Browser browser;
+
     @Override
     public void start(Stage primaryStage) {
         // init leap
@@ -70,7 +74,8 @@ public class LeapJavaFX extends Application {
             // create the scene
             primaryStage.setTitle("Presentation");
 
-            scene = new Scene(new Browser(Browser.LOCAL_PRES, UrlLocation.Local), 750, 500, Color.web("#666970"));
+            this.browser = new Browser(Browser.LOCAL_PRES, UrlLocation.Local);
+            scene = new Scene(browser, 750, 500, Color.web("#666970"));
         }
 
         loadMusic();
@@ -135,17 +140,39 @@ public class LeapJavaFX extends Application {
             @Override
             public void changed(ObservableValue<? extends Swipy> observable, Swipy oldValue, Swipy newValue) {
                 if (newValue.isSwiped()) {
-                    System.out.println("Fpund swip gesture");
+                    System.out.println("  Found swip gesture");
                     if (newValue.getDirection() == Direction.LEFT) {
-                        System.out.println("Swiped Left!!! at Observer");
-                        FXRobot robot = FXRobotFactory.createRobot(scene);
-                        robot.keyPress(javafx.scene.input.KeyCode.LEFT);
+                        System.out.println("  Swiped Left!!! at Observer");
+                        FXRobot fxrobot = FXRobotFactory.createRobot(scene);
+                        fxrobot.keyPress(javafx.scene.input.KeyCode.LEFT);
                         // ALERT_AUDIOCLIP.play();
-                    } else if (newValue.getDirection() == Direction.LEFT) {
-                        System.out.println("Swiped Right!!! at Observer");
-                        FXRobot robot = FXRobotFactory.createRobot(scene);
-                        robot.keyPress(javafx.scene.input.KeyCode.RIGHT);
+                        if (browser != null) {
+                            Platform.runLater(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    browser.prevPage();
+                                }
+                            });
+                        }
+
+                    } else if (newValue.getDirection() == Direction.RIGHT) {
+                        System.out.println("  Swiped Right!!! at Observer");
+                        FXRobot fxrobot = FXRobotFactory.createRobot(scene);
+                        fxrobot.keyPress(javafx.scene.input.KeyCode.RIGHT);
                         // ALERT_AUDIOCLIP.play();
+                        Robot robot = com.sun.glass.ui.Application.GetApplication().createRobot();
+                        robot.keyPress(KeyCode.RIGHT.impl_getCode());
+
+                        if (browser != null) {
+                            Platform.runLater(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    browser.nextPage();
+                                }
+                            });
+                        }
                     }
                 }
             }

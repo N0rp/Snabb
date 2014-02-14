@@ -70,6 +70,7 @@ public class SimpleLeapListener extends Listener {
                     Vector intersect = screen.intersect(hand.palmPosition(), hand.direction(), true);
                     point.setValue(new Point2D(screen.widthPixels() * Math.min(1d, Math.max(0d, intersect.getX())),
                             screen.heightPixels() * Math.min(1d, Math.max(0d, (1d - intersect.getY())))));
+                    // System.out.println("Palm position: " + hand.palmPosition());
                 }
 
                 // look for gestures
@@ -81,20 +82,26 @@ public class SimpleLeapListener extends Listener {
                         case TYPE_SWIPE:
                             if (gesture.state() == Gesture.State.STATE_STOP) {
                                 SwipeGesture swipe = new SwipeGesture(gesture);
-                                System.out.println("Swipe id: " + swipe.id() + ", " + swipe.state() + ", position: "
-                                        + swipe.position() + ", direction: " + swipe.direction() + ", speed: "
-                                        + swipe.speed() + ", duration: " + swipe.duration());
-
-                                foundSwipe = true;
-                                System.out.println("Swipe done");
-                                if (swipe.direction().getX() > 0) {
-                                    // swipe right
-                                    System.out.println("Right");
-                                    gestury.setValue(new Swipy(Direction.RIGHT));
-                                } else if (swipe.direction().getX() < 0) {
-                                    // swipe left
-                                    System.out.println("Left");
-                                    gestury.setValue(new Swipy(Direction.LEFT));
+                                System.out.println("Swipe id: " + swipe.id() + ", " + swipe.state() + ", fingers "
+                                        + gesture.pointables().count() + " position: " + swipe.position()
+                                        + ", direction: " + swipe.direction() + ", speed: " + swipe.speed()
+                                        + ", duration: " + swipe.duration());
+                                if (swipe.hands().count() > 0 && swipe.hands().get(0).fingers().count() == 2) {
+                                    System.out.println(" Two-Finger Swipe");
+                                    if (Math.abs(swipe.startPosition().getX()) > 100) {
+                                        System.out.println(" Swipe started reasonably");
+                                        foundSwipe = true;
+                                        System.out.println(" Swipe done");
+                                        if (swipe.direction().getX() > 0) {
+                                            // swipe right
+                                            System.out.println(" Swipe Right");
+                                            gestury.setValue(new Swipy(Direction.RIGHT));
+                                        } else if (swipe.direction().getX() < 0) {
+                                            // swipe left
+                                            System.out.println(" Swipe Left");
+                                            gestury.setValue(new Swipy(Direction.LEFT));
+                                        }
+                                    }
                                 }
                             }
                             break;

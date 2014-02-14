@@ -44,6 +44,19 @@ public class Browser extends Region {
         // loadFile(LOCAL_PRES);
         // add the web view to the scene
         getChildren().add(browser);
+
+    }
+
+    public void gotoPage(int index) {
+        webEngine.executeScript("impress().goto(" + index + ");");
+    }
+
+    public void nextPage() {
+        webEngine.executeScript("impress().next();");
+    }
+
+    public void prevPage() {
+        webEngine.executeScript("impress().prev();");
     }
 
     private void loadWeb(String url) {
