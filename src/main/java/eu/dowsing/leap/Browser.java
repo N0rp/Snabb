@@ -2,15 +2,28 @@ package eu.dowsing.leap;
 
 import java.io.File;
 import java.net.MalformedURLException;
+import java.util.LinkedList;
+import java.util.List;
 
+import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Worker.State;
+import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.events.Event;
+import org.w3c.dom.events.EventListener;
+import org.w3c.dom.events.EventTarget;
 
 public class Browser extends Region {
 
@@ -19,8 +32,11 @@ public class Browser extends Region {
     public final static String LOCAL_BORED = "res/web/bored/index.html";
     public final static String LOCAL_PRES = "res/web/temp/Deck Title.html";
 
-    final WebView browser = new WebView();
-    final WebEngine webEngine = browser.getEngine();
+    private final WebView webview = new WebView();
+    private final WebEngine webEngine = webview.getEngine();
+
+    private List<SlideChangedListener> slideChangedListener = new LinkedList<>();
+    private List<PageLoadCompleteListener> pageLoadCompleteListener = new LinkedList<>();
 
     /** the url location **/
     public enum UrlLocation {
@@ -29,6 +45,8 @@ public class Browser extends Region {
         /** on the web **/
         Web
     }
+
+    private int currentSlide = 1;
 
     public Browser(String url, UrlLocation location) {
         // apply the styles
@@ -43,20 +61,109 @@ public class Browser extends Region {
         // loadFile(LOCAL_BORED);
         // loadFile(LOCAL_PRES);
         // add the web view to the scene
-        getChildren().add(browser);
+        getChildren().add(webview);
 
+        setupListeners();
+    }
+
+    /**
+     * Setup the listeners for special events.
+     */
+    private void setupListeners() {
+        webview.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent keyEvent) {
+                if (keyEvent.getCode() == KeyCode.LEFT || keyEvent.getCode() == KeyCode.UP) {
+                    setSlideIndex(currentSlide - 1);
+                } else if (keyEvent.getCode() == KeyCode.RIGHT || keyEvent.getCode() == KeyCode.DOWN
+                        || keyEvent.getCode() == KeyCode.SPACE) {
+                    setSlideIndex(currentSlide + 1);
+                }
+            }
+        });
+
+        webEngine.getLoadWorker().stateProperty().addListener(new javafx.beans.value.ChangeListener<State>() {
+            public void changed(ObservableValue ov, State oldState, State newState) {
+                if (newState == State.SUCCEEDED) {
+                    // only called once loading is actually done
+                    System.out.println("Page Load Done");
+                    notifyPageLoadCompleteListeners();
+
+                    Document doc = webEngine.getDocument();
+                    Element el = doc.getElementById("impress");
+                    ((EventTarget) el).addEventListener("impress:stepenter", new EventListener() {
+
+                        @Override
+                        public void handleEvent(Event evt) {
+                            System.out.println("!!!Just did a step");
+                        }
+                    }, false);
+                }
+            }
+        });
+    }
+
+    public WebView getWebView() {
+        return this.webview;
     }
 
     public void gotoPage(int index) {
         webEngine.executeScript("impress().goto(" + index + ");");
     }
 
-    public void nextPage() {
+    public void gotoNextPage() {
+        setSlideIndex(currentSlide + 1);
         webEngine.executeScript("impress().next();");
     }
 
-    public void prevPage() {
+    public void gotoPrevPage() {
+        setSlideIndex(currentSlide - 1);
         webEngine.executeScript("impress().prev();");
+    }
+
+    public void addSlideChangedListener(SlideChangedListener listener) {
+        this.slideChangedListener.add(listener);
+    }
+
+    public boolean removeSlideChangedListener(SlideChangedListener listener) {
+        if (this.slideChangedListener.contains(listener)) {
+            return this.slideChangedListener.remove(listener);
+        }
+        return false;
+    }
+
+    private void notifySlideChangedListeners(int slideIndex) {
+        for (SlideChangedListener listener : this.slideChangedListener) {
+            listener.onSlideChanged(slideIndex);
+        }
+    }
+
+    public void addPageLoadCompleteListener(PageLoadCompleteListener listener) {
+        this.pageLoadCompleteListener.add(listener);
+    }
+
+    public boolean removePageLoadCompleteListener(PageLoadCompleteListener listener) {
+        if (this.pageLoadCompleteListener.contains(listener)) {
+            return this.pageLoadCompleteListener.remove(listener);
+        }
+        return false;
+    }
+
+    private void notifyPageLoadCompleteListeners() {
+        for (PageLoadCompleteListener listener : this.pageLoadCompleteListener) {
+            listener.onPageLoadComplete();
+        }
+    }
+
+    /**
+     * Set the current slide index, please only use this method as it notifies the listeners.
+     * 
+     * @param index
+     */
+    private void setSlideIndex(int index) {
+        System.out.println("Slide now: " + index);
+        this.currentSlide = index;
+        notifySlideChangedListeners(index);
     }
 
     private void loadWeb(String url) {
@@ -84,7 +191,7 @@ public class Browser extends Region {
     protected void layoutChildren() {
         double w = getWidth();
         double h = getHeight();
-        layoutInArea(browser, 0, 0, w, h, 0, HPos.CENTER, VPos.CENTER);
+        layoutInArea(webview, 0, 0, w, h, 0, HPos.CENTER, VPos.CENTER);
     }
 
     @Override

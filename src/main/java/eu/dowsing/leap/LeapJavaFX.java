@@ -10,8 +10,16 @@ import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.RectangleBuilder;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextBuilder;
 import javafx.stage.Stage;
 
 import com.leapmotion.leap.Controller;
@@ -74,8 +82,45 @@ public class LeapJavaFX extends Application {
             // create the scene
             primaryStage.setTitle("Presentation");
 
+            // VBox box = new VBox();
             this.browser = new Browser(Browser.LOCAL_PRES, UrlLocation.Local);
-            scene = new Scene(browser, 750, 500, Color.web("#666970"));
+            Pane overlay = getOverlay();
+            overlay.setMouseTransparent(true);
+
+            StackPane root = new StackPane();
+            root.getChildren().addAll(browser.getWebView(), overlay);
+
+            // Label test = new Label("Test");
+            // box.getChildren().add(test);
+            // box.getChildren().add(browser);
+            scene = new Scene(root, 750, 500, Color.web("#666970"));
+
+            this.browser.addSlideChangedListener(new SlideChangedListener() {
+
+                @Override
+                public void onSlideChanged(final int slideIndex) {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            System.out.println("Slide changed");
+                            txt.setText(slideIndex + "");
+                        }
+                    });
+                }
+            });
+
+            this.browser.addPageLoadCompleteListener(new PageLoadCompleteListener() {
+
+                @Override
+                public void onPageLoadComplete() {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            txt.setText("Fertig");
+                        }
+                    });
+                }
+            });
         }
 
         loadMusic();
@@ -83,6 +128,19 @@ public class LeapJavaFX extends Application {
 
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    private Text txt;
+
+    private Pane getOverlay() {
+        StackPane p = new StackPane();
+        Rectangle r = RectangleBuilder.create().height(100).width(100).arcHeight(200).arcWidth(200).stroke(Color.RED)
+                .fill(Color.web("red", 0.1)).build();
+
+        this.txt = TextBuilder.create().text("Overlay").font(Font.font("Arial", FontWeight.BOLD, 18)).fill(Color.BLUE)
+                .build();
+        p.getChildren().addAll(r, txt);
+        return p;
     }
 
     private void loadPdf() {
@@ -151,7 +209,7 @@ public class LeapJavaFX extends Application {
 
                                 @Override
                                 public void run() {
-                                    browser.prevPage();
+                                    browser.gotoPrevPage();
                                 }
                             });
                         }
@@ -169,7 +227,7 @@ public class LeapJavaFX extends Application {
 
                                 @Override
                                 public void run() {
-                                    browser.nextPage();
+                                    browser.gotoNextPage();
                                 }
                             });
                         }
