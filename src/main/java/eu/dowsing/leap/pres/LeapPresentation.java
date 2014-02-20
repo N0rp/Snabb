@@ -1,10 +1,10 @@
-package eu.dowsing.leap;
+package eu.dowsing.leap.pres;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import eu.dowsing.leap.Browser.UrlLocation;
+import eu.dowsing.leap.pres.Browser.UrlLocation;
 
 public class LeapPresentation extends Application {
     private Scene scene;

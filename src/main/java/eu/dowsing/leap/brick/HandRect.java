@@ -1,4 +1,4 @@
-package eu.dowsing.leap;
+package eu.dowsing.leap.brick;
 
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -16,36 +16,46 @@ import com.leapmotion.leap.Hand;
 public class HandRect {
 
     private Rectangle horizontal;
+    private Rectangle vertical;
     private Rectangle[] fingerRects;
 
     public HandRect(Pane p, int rectHeight, int rectWidth, int rectX, int rectY, int miniRectHeight, int miniRectWidth) {
         drawIndicator(p, rectHeight, rectWidth, rectX, rectY, miniRectHeight, miniRectWidth);
     }
 
-    private void drawIndicator(Pane p, int rectHeight, int rectWidth, int rectX, int rectY, int miniRectHeight,
-            int miniRectWidth) {
+    private void drawIndicator(Pane p, int hHeight, int hWidth, int rectX, int rectY, int mHeight, int mWidth) {
         final int fingerCount = 5;
         fingerRects = new Rectangle[fingerCount];
 
         final int rectMargin = 10;
-        final int rectRealWidth = rectWidth - (2 * rectMargin);
+        final int hRealWidth = hWidth - (2 * rectMargin);
 
-        int miniMargin = rectMargin / 2;
-        int miniRectRealWidth = miniRectWidth - miniMargin;
-        int miniRectX = rectX + (miniMargin / 2);
-        int miniRectY = rectY;
+        // create the measure for the mini finger rectangles
+        int miniRectMargin = rectMargin / 2;
+        int mRealWidth = mWidth - miniRectMargin;
+        int mRectX = rectX + (miniRectMargin / 2);
+        int mRectY = rectY;
+
+        // create measures for the vertical rectangle
+        final int vWidth = hHeight;
+        final int vHeight = hWidth / 2;
 
         // first create the rectangle indicating position of the hand
-        Rectangle rect = RectangleBuilder.create().height(rectHeight).width(rectRealWidth).arcHeight(0).arcWidth(0)
+        horizontal = RectangleBuilder.create().height(hHeight).width(hRealWidth).arcHeight(0).arcWidth(0)
                 .stroke(Color.RED).fill(Color.web("blue", 0.1)).translateX(rectX).translateY(rectY).build();
-        p.getChildren().add(rect);
-        horizontal = rect;
+        p.getChildren().add(horizontal);
+
+        // create rectangle indicating if the hand is vertical
+        vertical = RectangleBuilder.create().height(vHeight).width(vWidth).arcHeight(0).arcWidth(0).stroke(Color.RED)
+                .fill(Color.web("blue", 0.1)).translateX(rectX + (hWidth / 2) - (vWidth / 2))
+                .translateY(rectY - vHeight).build();
+        p.getChildren().add(vertical);
 
         // now create the rectangles indicating fingers found
         for (int i = 0; i < fingerRects.length; i++) {
-            Rectangle mini = RectangleBuilder.create().height(miniRectHeight).width(miniRectRealWidth).arcHeight(0)
-                    .arcWidth(0).stroke(Color.GREEN).fill(Color.web("blue", 0.1))
-                    .translateX(miniRectX + (i * miniRectWidth)).translateY(miniRectY).build();
+            Rectangle mini = RectangleBuilder.create().height(mHeight).width(mRealWidth).arcHeight(0).arcWidth(0)
+                    .stroke(Color.GREEN).fill(Color.web("blue", 0.1)).translateX(mRectX + (i * mWidth))
+                    .translateY(mRectY).build();
             fingerRects[i] = mini;
             p.getChildren().add(mini);
         }

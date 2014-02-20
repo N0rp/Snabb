@@ -1,4 +1,4 @@
-package eu.dowsing.leap;
+package eu.dowsing.leap.pres;
 
 import java.io.File;
 import java.net.MalformedURLException;

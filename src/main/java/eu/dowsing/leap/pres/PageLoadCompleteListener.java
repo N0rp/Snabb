@@ -1,4 +1,4 @@
-package eu.dowsing.leap;
+package eu.dowsing.leap.pres;
 
 public interface PageLoadCompleteListener {
 

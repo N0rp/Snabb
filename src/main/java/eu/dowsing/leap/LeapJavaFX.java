@@ -24,10 +24,14 @@ import com.sun.glass.ui.Robot;
 import com.sun.javafx.robot.FXRobot;
 import com.sun.javafx.robot.FXRobotFactory;
 
-import eu.dowsing.leap.Browser.UrlLocation;
 import eu.dowsing.leap.SimpleLeapListener.Direction;
 import eu.dowsing.leap.SimpleLeapListener.Swipy;
+import eu.dowsing.leap.brick.BrickMenuView;
 import eu.dowsing.leap.gesture.DoubleHandListener;
+import eu.dowsing.leap.pres.Browser;
+import eu.dowsing.leap.pres.Browser.UrlLocation;
+import eu.dowsing.leap.pres.PageLoadCompleteListener;
+import eu.dowsing.leap.pres.SlideChangedListener;
 import eu.dowsing.leap.storage.MainProperties;
 import eu.dowsing.leap.storage.MainProperties.Key;
 
@@ -53,7 +57,7 @@ public class LeapJavaFX extends Application {
         Leap, Presentation
     }
 
-    private Visualize visualize = Visualize.Leap;
+    private Visualize visualize = Visualize.Presentation;
 
     private Browser browser;
 
@@ -61,7 +65,10 @@ public class LeapJavaFX extends Application {
 
     private Map<Visualize, Pane> screens = new HashMap<Visualize, Pane>();
 
-    private LeapMenu overlay;
+    private BrickMenuView overlay;
+
+    private final int sceneWidth = 600;
+    private final int sceneHeight = 400;
 
     @Override
     public void start(Stage primaryStage) {
@@ -77,30 +84,26 @@ public class LeapJavaFX extends Application {
         // init view
         this.scene = null;
         this.root = null;
-        overlay = new LeapMenu();
+        overlay = new BrickMenuView(this.sceneWidth, this.sceneHeight);
         overlay.setMouseTransparent(true);
 
         // create all possible screens
         initScreens();
 
+        // pick one of the possible screens
         Pane currentRoot = null;
         if (visualize == Visualize.Leap) {
             primaryStage.setTitle("Leap Test View");
             currentRoot = screens.get(Visualize.Leap);
         } else if (visualize == Visualize.Presentation) {
-            // create the scene
             primaryStage.setTitle("Presentation");
             currentRoot = screens.get(Visualize.Presentation);
-
-            // Label test = new Label("Test");
-            // box.getChildren().add(test);
-            // box.getChildren().add(browser);
         }
 
         this.root = new StackPane();
         root.getChildren().addAll(currentRoot, overlay);
 
-        scene = new Scene(root, 800, 600);
+        scene = new Scene(root, this.sceneWidth, this.sceneHeight);
 
         loadMusic();
         initLeap(scene);
