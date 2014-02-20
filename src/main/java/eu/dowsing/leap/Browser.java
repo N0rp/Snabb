@@ -18,12 +18,15 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import netscape.javascript.JSObject;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 import org.w3c.dom.events.Event;
 import org.w3c.dom.events.EventListener;
 import org.w3c.dom.events.EventTarget;
+import org.w3c.dom.html.HTMLDivElement;
 
 public class Browser extends Region {
 
@@ -95,7 +98,24 @@ public class Browser extends Region {
 
                         @Override
                         public void handleEvent(Event evt) {
-                            System.out.println("!!!Just did a step");
+                            if (evt.getTarget() instanceof HTMLDivElement) {
+                                HTMLDivElement element = (HTMLDivElement) evt.getTarget();
+                                // element id is either step-1, step-2, etc. or overview
+
+                                System.out.println("Event target id is " + element.getId());
+                                String target = element.getId();
+                                int step = -1;
+                                if (target.contains("step-")) {
+                                    target = target.replace("step-", "");
+                                    step = Integer.parseInt(target);
+                                } else if (target.contains("overview")) {
+                                    step = 0;
+                                }
+                                if (step >= 0) {
+                                    setSlideIndex(step);
+                                }
+                                System.out.println("!!!Just did a step to " + step);
+                            }
                         }
                     }, false);
                 }
@@ -114,11 +134,44 @@ public class Browser extends Region {
     public void gotoNextPage() {
         setSlideIndex(currentSlide + 1);
         webEngine.executeScript("impress().next();");
+        getStepsLength();
     }
 
     public void gotoPrevPage() {
         setSlideIndex(currentSlide - 1);
         webEngine.executeScript("impress().prev();");
+        getStepsLength();
+    }
+
+    public void getStepsLength() {
+        Document doc = webEngine.getDocument();
+        if (doc != null) {
+            Element step1 = doc.getElementById("step-1");
+            Element step9 = doc.getElementById("step-9");
+            Element step10 = doc.getElementById("step-10");
+            HTMLDivElement div1 = (HTMLDivElement) step1;
+
+            NodeList elements = doc.getElementsByTagName("step active present");
+
+            Element el = doc.getElementById("impress.activeStep");
+
+            JSObject impress = (JSObject) webEngine.executeScript("impress");
+            Object res = impress.call("getStepLength");
+            Object memberSteps = impress.getMember("steps.length");
+            Object activeStep = impress.getMember("activeStep");
+
+            String test = "impress.steps";
+            Object test1 = (Object) webEngine.executeScript(test);
+
+            System.out.println("Steps result is " + res);
+            System.out.println("Steps element is " + el);
+            System.out.println("Steps array is " + memberSteps);
+            System.out.println("ActiveStep is " + activeStep);
+            System.out.println("Test1 is " + test1);
+        }
+
+        // JSObject result2 = (JSObject) webEngine.executeScript("impress.steps;");
+        // System.out.println("Stepsresult 2 is " + result2);
     }
 
     public void addSlideChangedListener(SlideChangedListener listener) {
@@ -133,6 +186,7 @@ public class Browser extends Region {
     }
 
     private void notifySlideChangedListeners(int slideIndex) {
+        getStepsLength();
         for (SlideChangedListener listener : this.slideChangedListener) {
             listener.onSlideChanged(slideIndex);
         }

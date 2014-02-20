@@ -416,6 +416,10 @@ var innerBg = document.querySelector('.innerBg');
             triggerEvent(root, "impress:init", { api: roots[ "impress-root-" + rootId ] });
         };
         
+        var getStepLength = function(){
+        	return steps.length;
+        }
+        
         // `getStep` is a helper function that returns a step element defined by parameter.
         // If a number is given, step with index given by the number is returned, if a string
         // is given step element with such id is returned, if DOM element is given it is returned

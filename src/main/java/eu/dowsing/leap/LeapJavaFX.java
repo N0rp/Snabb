@@ -1,6 +1,8 @@
 package eu.dowsing.leap;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -14,12 +16,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.RectangleBuilder;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextBuilder;
 import javafx.stage.Stage;
 
 import com.leapmotion.leap.Controller;
@@ -42,7 +38,7 @@ public class LeapJavaFX extends Application {
     private DoubleHandListener doubleListener = new DoubleHandListener();
     private Controller leapController = new Controller();
 
-    private AnchorPane root = new AnchorPane();
+    private Pane root;
     private Circle circle = new Circle(50, Color.DEEPSKYBLUE);
 
     private MainProperties mainPropManager = MainProperties.getInstance();
@@ -57,9 +53,15 @@ public class LeapJavaFX extends Application {
         Leap, Presentation
     }
 
-    private Visualize visualize = Visualize.Presentation;
+    private Visualize visualize = Visualize.Leap;
 
     private Browser browser;
+
+    private Scene scene;
+
+    private Map<Visualize, Pane> screens = new HashMap<Visualize, Pane>();
+
+    private LeapMenu overlay;
 
     @Override
     public void start(Stage primaryStage) {
@@ -73,27 +75,60 @@ public class LeapJavaFX extends Application {
             leapController.config().save();
 
         // init view
-        Scene scene = null;
+        this.scene = null;
+        this.root = null;
+        overlay = new LeapMenu();
+        overlay.setMouseTransparent(true);
+
+        // create all possible screens
+        initScreens();
+
+        Pane currentRoot = null;
         if (visualize == Visualize.Leap) {
             primaryStage.setTitle("Leap Test View");
-            loadCircleDisplay(scene);
-            scene = new Scene(root, 800, 600);
+            currentRoot = screens.get(Visualize.Leap);
         } else if (visualize == Visualize.Presentation) {
             // create the scene
             primaryStage.setTitle("Presentation");
-
-            // VBox box = new VBox();
-            this.browser = new Browser(Browser.LOCAL_PRES, UrlLocation.Local);
-            Pane overlay = getOverlay();
-            overlay.setMouseTransparent(true);
-
-            StackPane root = new StackPane();
-            root.getChildren().addAll(browser.getWebView(), overlay);
+            currentRoot = screens.get(Visualize.Presentation);
 
             // Label test = new Label("Test");
             // box.getChildren().add(test);
             // box.getChildren().add(browser);
-            scene = new Scene(root, 750, 500, Color.web("#666970"));
+        }
+
+        this.root = new StackPane();
+        root.getChildren().addAll(currentRoot, overlay);
+
+        scene = new Scene(root, 800, 600);
+
+        loadMusic();
+        initLeap(scene);
+
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    private void initScreens() {
+        this.screens.put(Visualize.Leap, createScreen(Visualize.Leap));
+        this.screens.put(Visualize.Presentation, createScreen(Visualize.Presentation));
+    }
+
+    private Pane createScreen(Visualize visualize) {
+        if (visualize == Visualize.Leap) {
+            Pane current = new AnchorPane();
+            loadCircleDisplay(current);
+            return current;
+        } else if (visualize == Visualize.Presentation) {
+            // VBox box = new VBox();
+            this.browser = new Browser(Browser.LOCAL_PRES, UrlLocation.Local);
+
+            Pane pane = new StackPane();
+            pane.getChildren().add(browser);
+
+            // Label test = new Label("Test");
+            // box.getChildren().add(test);
+            // box.getChildren().add(browser);
 
             this.browser.addSlideChangedListener(new SlideChangedListener() {
 
@@ -103,7 +138,7 @@ public class LeapJavaFX extends Application {
                         @Override
                         public void run() {
                             System.out.println("Slide changed");
-                            txt.setText(slideIndex + "");
+                            overlay.setText(slideIndex + "");
                         }
                     });
                 }
@@ -116,31 +151,16 @@ public class LeapJavaFX extends Application {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            txt.setText("Fertig");
+                            overlay.setText("Fertig");
                         }
                     });
                 }
             });
+
+            return pane;
+        } else {
+            return null;
         }
-
-        loadMusic();
-        initLeap(scene);
-
-        primaryStage.setScene(scene);
-        primaryStage.show();
-    }
-
-    private Text txt;
-
-    private Pane getOverlay() {
-        StackPane p = new StackPane();
-        Rectangle r = RectangleBuilder.create().height(100).width(100).arcHeight(200).arcWidth(200).stroke(Color.RED)
-                .fill(Color.web("red", 0.1)).build();
-
-        this.txt = TextBuilder.create().text("Overlay").font(Font.font("Arial", FontWeight.BOLD, 18)).fill(Color.BLUE)
-                .build();
-        p.getChildren().addAll(r, txt);
-        return p;
     }
 
     private void loadPdf() {
@@ -157,7 +177,7 @@ public class LeapJavaFX extends Application {
 
     }
 
-    private void loadCircleDisplay(final Scene scene) {
+    private void loadCircleDisplay(final Pane root) {
 
         circle.setLayoutX(circle.getRadius());
         circle.setLayoutY(circle.getRadius());
@@ -173,13 +193,17 @@ public class LeapJavaFX extends Application {
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        Point2D d = root.sceneToLocal(t1.getX() - scene.getX() - scene.getWindow().getX(), t1.getY()
-                                - scene.getY() - scene.getWindow().getY());
-                        double dx = d.getX(), dy = d.getY();
-                        if (dx >= 0d && dx <= root.getWidth() - 2d * circle.getRadius() && dy >= 0d
-                                && dy <= root.getHeight() - 2d * circle.getRadius()) {
-                            circle.setTranslateX(dx);
-                            circle.setTranslateY(dy);
+                        if (LeapJavaFX.this.scene != null) {
+                            Scene scene = LeapJavaFX.this.scene;
+
+                            Point2D d = root.sceneToLocal(t1.getX() - scene.getX() - scene.getWindow().getX(),
+                                    t1.getY() - scene.getY() - scene.getWindow().getY());
+                            double dx = d.getX(), dy = d.getY();
+                            if (dx >= 0d && dx <= root.getWidth() - 2d * circle.getRadius() && dy >= 0d
+                                    && dy <= root.getHeight() - 2d * circle.getRadius()) {
+                                circle.setTranslateX(dx);
+                                circle.setTranslateY(dy);
+                            }
                         }
                     }
                 });
