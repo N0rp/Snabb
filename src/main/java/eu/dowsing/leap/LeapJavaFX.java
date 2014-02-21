@@ -26,8 +26,10 @@ import com.sun.javafx.robot.FXRobotFactory;
 
 import eu.dowsing.leap.SimpleLeapListener.Direction;
 import eu.dowsing.leap.SimpleLeapListener.Swipy;
+import eu.dowsing.leap.brick.BrickMenuAdapterInterface;
+import eu.dowsing.leap.brick.BrickMenuController;
 import eu.dowsing.leap.brick.BrickMenuView;
-import eu.dowsing.leap.gesture.DoubleHandListener;
+import eu.dowsing.leap.brick.presentation.BasicMenuAdapter;
 import eu.dowsing.leap.pres.Browser;
 import eu.dowsing.leap.pres.Browser.UrlLocation;
 import eu.dowsing.leap.pres.PageLoadCompleteListener;
@@ -38,8 +40,12 @@ import eu.dowsing.leap.storage.MainProperties.Key;
 public class LeapJavaFX extends Application {
     // private final AudioClip ALERT_AUDIOCLIP;
 
+    private enum Visualize {
+        Test, Presentation
+    }
+
     private SimpleLeapListener listener = new SimpleLeapListener();
-    private DoubleHandListener doubleListener = new DoubleHandListener();
+    private BrickMenuController menuController;
     private Controller leapController = new Controller();
 
     private Pane root;
@@ -53,11 +59,7 @@ public class LeapJavaFX extends Application {
         // ALERT_AUDIOCLIP = new AudioClip("file://" + f.getAbsolutePath());
     }
 
-    private enum Visualize {
-        Leap, Presentation
-    }
-
-    private Visualize visualize = Visualize.Presentation;
+    private Visualize visualize = Visualize.Test;
 
     private Browser browser;
 
@@ -67,14 +69,21 @@ public class LeapJavaFX extends Application {
 
     private BrickMenuView overlay;
 
-    private final int sceneWidth = 600;
+    private final int sceneWidth = 700;
     private final int sceneHeight = 400;
 
     @Override
     public void start(Stage primaryStage) {
+        BrickMenuAdapterInterface menuAdapter = new BasicMenuAdapter();
+        overlay = new BrickMenuView(this.sceneWidth, this.sceneHeight);
+        overlay.setMouseTransparent(true);
+        overlay.setAdapter(menuAdapter);
+
+        menuController = new BrickMenuController(overlay, menuAdapter);
+
         // init leap
         leapController.addListener(listener);
-        leapController.addListener(doubleListener);
+        leapController.addListener(menuController);
 
         leapController.enableGesture(Gesture.Type.TYPE_SWIPE);
         if (leapController.config().setFloat("Gesture.Swipe.MinLength", 100)
@@ -84,17 +93,15 @@ public class LeapJavaFX extends Application {
         // init view
         this.scene = null;
         this.root = null;
-        overlay = new BrickMenuView(this.sceneWidth, this.sceneHeight);
-        overlay.setMouseTransparent(true);
 
         // create all possible screens
         initScreens();
 
         // pick one of the possible screens
         Pane currentRoot = null;
-        if (visualize == Visualize.Leap) {
+        if (visualize == Visualize.Test) {
             primaryStage.setTitle("Leap Test View");
-            currentRoot = screens.get(Visualize.Leap);
+            currentRoot = screens.get(Visualize.Test);
         } else if (visualize == Visualize.Presentation) {
             primaryStage.setTitle("Presentation");
             currentRoot = screens.get(Visualize.Presentation);
@@ -113,12 +120,12 @@ public class LeapJavaFX extends Application {
     }
 
     private void initScreens() {
-        this.screens.put(Visualize.Leap, createScreen(Visualize.Leap));
+        this.screens.put(Visualize.Test, createScreen(Visualize.Test));
         this.screens.put(Visualize.Presentation, createScreen(Visualize.Presentation));
     }
 
     private Pane createScreen(Visualize visualize) {
-        if (visualize == Visualize.Leap) {
+        if (visualize == Visualize.Test) {
             Pane current = new AnchorPane();
             loadCircleDisplay(current);
             return current;

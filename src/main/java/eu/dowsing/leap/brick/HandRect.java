@@ -15,6 +15,14 @@ import com.leapmotion.leap.Hand;
  */
 public class HandRect {
 
+    public enum Position {
+        HORIZONTAL, VERTICAL
+    }
+
+    public enum Importance {
+        PRIMARY, SECONDARY
+    }
+
     private Rectangle horizontal;
     private Rectangle vertical;
     private Rectangle[] fingerRects;
@@ -76,27 +84,42 @@ public class HandRect {
         }
     }
 
-    public void showHand(Hand h) {
+    public Color getHandColor(Importance importance) {
+        if (importance == Importance.PRIMARY) {
+            return Color.web("green", 0.1);
+        } else if (importance == Importance.SECONDARY) {
+            return Color.web("yellow", 0.1);
+        } else {
+            return Color.web("red", 0.1);
+        }
+    }
 
-        if (h.isValid()) {
-            // first all rectangles visible
-            setRectangleVisibility(true);
+    public void showHand(Importance importance, Position pos, int fingerCount) {
+        // first all rectangles visible
+        setVisible(true);
 
-            // then we hide invisible fingers
-            int fingersVisible = h.fingers().count();
-            for (int i = fingersVisible; i < fingerRects.length; i++) {
-                fingerRects[i].setVisible(false);
-            }
+        // hide vertical or horizontal position
+        if (pos == Position.HORIZONTAL) {
+            horizontal.setFill(getHandColor(importance));
+            vertical.setVisible(false);
+        } else if (pos == Position.VERTICAL) {
+            horizontal.setVisible(false);
+            vertical.setFill(getHandColor(importance));
+        }
 
+        // then we hide invisible fingers
+        for (int i = fingerCount; i < fingerRects.length; i++) {
+            fingerRects[i].setVisible(false);
         }
     }
 
     public void hide() {
-        setRectangleVisibility(false);
+        setVisible(false);
     }
 
-    private void setRectangleVisibility(boolean visible) {
+    private void setVisible(boolean visible) {
         horizontal.setVisible(visible);
+        vertical.setVisible(visible);
         for (Rectangle rect : this.fingerRects) {
             rect.setVisible(visible);
         }

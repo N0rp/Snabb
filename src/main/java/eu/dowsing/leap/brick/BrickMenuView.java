@@ -1,11 +1,18 @@
 package eu.dowsing.leap.brick;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.RectangleBuilder;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBuilder;
+import eu.dowsing.leap.brick.HandRect.Importance;
+import eu.dowsing.leap.brick.HandRect.Position;
 
 /**
  * Contains all visualizations for the leap motion control
@@ -15,24 +22,66 @@ import javafx.scene.text.TextBuilder;
  */
 public class BrickMenuView extends Pane {
 
+    public enum Hand {
+        PRIMARY, SECONDARY
+    }
+
     private Text txt;
 
-    private HandRect[] horizRects;
+    private List<List<HandRect>> categories = new LinkedList<>();
 
     private int sceneWidth;
     private int sceneHeight;
 
+    private Rectangle noadapter;
+
+    private BrickMenuAdapterInterface adapter;
+
     public BrickMenuView(int sceneWidth, int sceneHeight) {
         this.sceneWidth = sceneHeight;
         this.sceneHeight = sceneHeight;
-        setOverlay(this);
+
+        // show a big red rectangle indicating no adapter has been set yet
+        this.noadapter = RectangleBuilder.create().height(this.sceneHeight).width(this.sceneHeight).stroke(Color.RED)
+                .fill(Color.web("red", 0.1)).build();
+        getChildren().add(noadapter);
     }
 
     public void setText(String text) {
-        this.txt.setText(text);
+        if (this.txt != null) {
+            this.txt.setText(text);
+        }
     }
 
-    private void setOverlay(Pane p) {
+    /**
+     * Will clear the view of displaying any hands
+     */
+    public void clearHands() {
+        for (List<HandRect> rectangles : this.categories) {
+            for (HandRect rect : rectangles) {
+                rect.hide();
+            }
+        }
+    }
+
+    public void showHand(int category, int subcategory, Importance importance, Position position, int fingerCount) {
+        List<HandRect> subcategories = categories.get(category);
+        HandRect rect = subcategories.get(subcategory);
+        rect.showHand(importance, position, fingerCount);
+    }
+
+    /**
+     * Set the adapter of the view.
+     * 
+     * @param adapter
+     */
+    public void setAdapter(BrickMenuAdapterInterface adapter) {
+        this.adapter = adapter;
+        drawOverlay();
+    }
+
+    private void drawOverlay() {
+        this.noadapter.setVisible(false);
         // Rectangle r = RectangleBuilder.create().height(100).width(100).arcHeight(200).arcWidth(200).stroke(Color.RED)
         // .fill(Color.web("red", 0.1)).translateY(100).build();
 
@@ -45,36 +94,50 @@ public class BrickMenuView extends Pane {
         // Rectangle right = RectangleBuilder.create().height(100).width(100).arcHeight(400).arcWidth(0)
         // .stroke(Color.GREEN).fill(Color.web("green", 0.1)).translateX(200).translateY(200).build();
         // p.getChildren().addAll(r, txt, left, right);
-        p.getChildren().addAll(txt);
+        getChildren().addAll(txt);
         // create horizontal rectangles to display leap location
-        createHorizontalRectangles(p, 5);
+        createHorizontalRectangles(this, 5);
     }
 
     private void createHorizontalRectangles(Pane p, int count) {
-        final int rectCount = 5;
         final int fingerCount = 5;
         System.out.println("Creating horizontal rectangles");
-        horizRects = new HandRect[rectCount];
 
+        // we use the margin to leave space between rectangles
+
+        // determine the form of the main rectangles
         final int rectMargin = 10;
         final int rectHeight = 20;
-        final int rectWidth = (int) (this.sceneWidth / rectCount);
-        final int rectRealWidth = rectWidth - (2 * rectMargin);
-
-        int rectX = rectMargin;
-        int rectY = this.sceneHeight - rectHeight; // rectangle on bottom edge
 
         int miniMargin = 10;
-        int miniRectWidth = (rectRealWidth / fingerCount);
-        int miniRectRealWidth = miniRectWidth - miniMargin;
-        int miniRectHeight = miniRectRealWidth;
-        int miniRectY = rectY - miniRectHeight - rectMargin;
 
-        // draw bottom hand rectangles
-        for (int i = 0; i < horizRects.length; i++) {
-            horizRects[i] = new HandRect(p, rectHeight, rectWidth, rectX, miniRectY, miniRectHeight, miniRectWidth);
+        int rectY = this.sceneHeight - rectHeight; // rectangle on bottom edge
 
-            rectX += rectWidth;
+        // draw rectangles
+        for (int i = 0; i < adapter.getCategories(); i++) {
+            // create space for horizontal rectangles
+            List<HandRect> horizRects = new LinkedList<>();
+            categories.add(horizRects);
+
+            // create properties for rectangles
+            final int rectCount = adapter.getSubCategories(i);
+            final int rectWidth = (int) (this.sceneWidth / rectCount);
+            final int rectRealWidth = rectWidth - (2 * rectMargin);
+
+            // create mini rectangle properties
+            int miniRectWidth = (rectRealWidth / fingerCount);
+            int miniRectRealWidth = miniRectWidth - miniMargin;
+            int miniRectHeight = miniRectRealWidth;
+
+            int rectX = rectMargin;
+            int miniRectY = rectY - miniRectHeight - rectMargin;
+
+            for (int j = 0; j < rectCount; j++) {
+                horizRects.add(new HandRect(p, rectHeight, rectWidth, rectX, miniRectY, miniRectHeight, miniRectWidth));
+                rectX += rectWidth;
+            }
+            rectY -= (this.sceneWidth / rectCount);
+            System.out.println("RectY is now: " + rectY);
         }
     }
 }
