@@ -2,10 +2,14 @@ package eu.dowsing.leap.brick;
 
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.CircleBuilder;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.RectangleBuilder;
 
 import com.leapmotion.leap.Hand;
+
+import eu.dowsing.leap.brick.Brick.Position;
 
 /**
  * Represents a complete hand including its fingers.
@@ -15,9 +19,7 @@ import com.leapmotion.leap.Hand;
  */
 public class HandRect {
 
-    public enum Position {
-        HORIZONTAL, VERTICAL
-    }
+    // port(left hand:red) and starboard(right hand:green)
 
     public enum Importance {
         PRIMARY, SECONDARY
@@ -26,6 +28,8 @@ public class HandRect {
     private Rectangle horizontal;
     private Rectangle vertical;
     private Rectangle[] fingerRects;
+
+    private Circle indicator;
 
     public HandRect(Pane p, int rectHeight, int rectWidth, int rectX, int rectY, int miniRectHeight, int miniRectWidth) {
         drawIndicator(p, rectHeight, rectWidth, rectX, rectY, miniRectHeight, miniRectWidth);
@@ -48,15 +52,20 @@ public class HandRect {
         final int vWidth = hHeight;
         final int vHeight = hWidth / 2;
 
-        // first create the rectangle indicating position of the hand
+        // create the circle indicating where the hand can be
+        this.indicator = CircleBuilder.create().radius(hHeight / 2).centerX(rectX + (hWidth / 2) - (hHeight / 2))
+                .centerY(rectY + (hHeight / 2)).fill(Color.web("grey", 0.1)).build();
+        p.getChildren().add(indicator);
+
+        // create the rectangle indicating position of the hand
         horizontal = RectangleBuilder.create().height(hHeight).width(hRealWidth).arcHeight(0).arcWidth(0)
                 .stroke(Color.RED).fill(Color.web("blue", 0.1)).translateX(rectX).translateY(rectY).build();
         p.getChildren().add(horizontal);
 
         // create rectangle indicating if the hand is vertical
         vertical = RectangleBuilder.create().height(vHeight).width(vWidth).arcHeight(0).arcWidth(0).stroke(Color.RED)
-                .fill(Color.web("blue", 0.1)).translateX(rectX + (hWidth / 2) - (vWidth / 2))
-                .translateY(rectY - vHeight).build();
+                .fill(Color.web("blue", 0.1)).translateX(rectX + (vWidth / 2)).translateY(rectY - (vHeight / 2))
+                .build();
         p.getChildren().add(vertical);
 
         // now create the rectangles indicating fingers found
@@ -85,12 +94,13 @@ public class HandRect {
     }
 
     public Color getHandColor(Importance importance) {
+        // port(left hand/secondary:red) and starboard(right hand/primary:green)
         if (importance == Importance.PRIMARY) {
-            return Color.web("green", 0.1);
+            return Color.web("green", 1);
         } else if (importance == Importance.SECONDARY) {
-            return Color.web("yellow", 0.1);
+            return Color.web("red", 1);
         } else {
-            return Color.web("red", 0.1);
+            return Color.web("yellow", 1);
         }
     }
 
@@ -113,16 +123,26 @@ public class HandRect {
         }
     }
 
-    public void hide() {
-        setVisible(false);
-    }
-
-    private void setVisible(boolean visible) {
+    /**
+     * Show or hide the complete hand with all indicators
+     * 
+     * @param visible
+     */
+    public void setVisible(boolean visible) {
         horizontal.setVisible(visible);
         vertical.setVisible(visible);
         for (Rectangle rect : this.fingerRects) {
             rect.setVisible(visible);
         }
+    }
+
+    /**
+     * Show or hide only the hand hint.
+     * 
+     * @param visible
+     */
+    public void setHintVisible(boolean visible) {
+        this.indicator.setVisible(visible);
     }
 
 }

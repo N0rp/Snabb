@@ -6,11 +6,7 @@ import java.util.Map;
 
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.geometry.Point2D;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -20,12 +16,7 @@ import javafx.stage.Stage;
 
 import com.leapmotion.leap.Controller;
 import com.leapmotion.leap.Gesture;
-import com.sun.glass.ui.Robot;
-import com.sun.javafx.robot.FXRobot;
-import com.sun.javafx.robot.FXRobotFactory;
 
-import eu.dowsing.leap.SimpleLeapListener.Direction;
-import eu.dowsing.leap.SimpleLeapListener.Swipy;
 import eu.dowsing.leap.brick.BrickMenuAdapterInterface;
 import eu.dowsing.leap.brick.BrickMenuController;
 import eu.dowsing.leap.brick.BrickMenuView;
@@ -44,7 +35,7 @@ public class LeapJavaFX extends Application {
         Test, Presentation
     }
 
-    private SimpleLeapListener listener = new SimpleLeapListener();
+    // private SimpleLeapListener listener = new SimpleLeapListener();
     private BrickMenuController menuController;
     private Controller leapController = new Controller();
 
@@ -82,7 +73,7 @@ public class LeapJavaFX extends Application {
         menuController = new BrickMenuController(overlay, menuAdapter);
 
         // init leap
-        leapController.addListener(listener);
+        // leapController.addListener(listener);
         leapController.addListener(menuController);
 
         leapController.enableGesture(Gesture.Type.TYPE_SWIPE);
@@ -197,28 +188,28 @@ public class LeapJavaFX extends Application {
         // root.getChildren().add(circle);
         // final Scene scene = new Scene(root, 800, 600);
 
-        listener.pointProperty().addListener(new ChangeListener<Point2D>() {
-            @Override
-            public void changed(ObservableValue ov, Point2D t, final Point2D t1) {
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (LeapJavaFX.this.scene != null) {
-                            Scene scene = LeapJavaFX.this.scene;
-
-                            Point2D d = root.sceneToLocal(t1.getX() - scene.getX() - scene.getWindow().getX(),
-                                    t1.getY() - scene.getY() - scene.getWindow().getY());
-                            double dx = d.getX(), dy = d.getY();
-                            if (dx >= 0d && dx <= root.getWidth() - 2d * circle.getRadius() && dy >= 0d
-                                    && dy <= root.getHeight() - 2d * circle.getRadius()) {
-                                circle.setTranslateX(dx);
-                                circle.setTranslateY(dy);
-                            }
-                        }
-                    }
-                });
-            }
-        });
+        // listener.pointProperty().addListener(new ChangeListener<Point2D>() {
+        // @Override
+        // public void changed(ObservableValue ov, Point2D t, final Point2D t1) {
+        // Platform.runLater(new Runnable() {
+        // @Override
+        // public void run() {
+        // if (LeapJavaFX.this.scene != null) {
+        // Scene scene = LeapJavaFX.this.scene;
+        //
+        // Point2D d = root.sceneToLocal(t1.getX() - scene.getX() - scene.getWindow().getX(),
+        // t1.getY() - scene.getY() - scene.getWindow().getY());
+        // double dx = d.getX(), dy = d.getY();
+        // if (dx >= 0d && dx <= root.getWidth() - 2d * circle.getRadius() && dy >= 0d
+        // && dy <= root.getHeight() - 2d * circle.getRadius()) {
+        // circle.setTranslateX(dx);
+        // circle.setTranslateY(dy);
+        // }
+        // }
+        // }
+        // });
+        // }
+        // });
     }
 
     private void loadMusic() {
@@ -227,55 +218,54 @@ public class LeapJavaFX extends Application {
     }
 
     private void initLeap(final Scene scene) {
-        listener.gestureProperty().addListener(new ChangeListener<Swipy>() {
-
-            @Override
-            public void changed(ObservableValue<? extends Swipy> observable, Swipy oldValue, Swipy newValue) {
-                if (newValue.isSwiped()) {
-                    System.out.println("  Found swip gesture");
-                    if (newValue.getDirection() == Direction.LEFT) {
-                        System.out.println("  Swiped Left!!! at Observer");
-                        FXRobot fxrobot = FXRobotFactory.createRobot(scene);
-                        fxrobot.keyPress(javafx.scene.input.KeyCode.LEFT);
-                        // ALERT_AUDIOCLIP.play();
-                        if (browser != null) {
-                            Platform.runLater(new Runnable() {
-
-                                @Override
-                                public void run() {
-                                    browser.gotoPrevPage();
-                                }
-                            });
-                        }
-
-                    } else if (newValue.getDirection() == Direction.RIGHT) {
-                        System.out.println("  Swiped Right!!! at Observer");
-                        FXRobot fxrobot = FXRobotFactory.createRobot(scene);
-                        fxrobot.keyPress(javafx.scene.input.KeyCode.RIGHT);
-                        // ALERT_AUDIOCLIP.play();
-                        Robot robot = com.sun.glass.ui.Application.GetApplication().createRobot();
-                        robot.keyPress(KeyCode.RIGHT.impl_getCode());
-
-                        if (browser != null) {
-                            Platform.runLater(new Runnable() {
-
-                                @Override
-                                public void run() {
-                                    browser.gotoNextPage();
-                                }
-                            });
-                        }
-                    }
-                }
-            }
-        });
+        // listener.gestureProperty().addListener(new ChangeListener<Swipy>() {
+        //
+        // @Override
+        // public void changed(ObservableValue<? extends Swipy> observable, Swipy oldValue, Swipy newValue) {
+        // if (newValue.isSwiped()) {
+        // System.out.println("  Found swip gesture");
+        // if (newValue.getDirection() == Direction.LEFT) {
+        // System.out.println("  Swiped Left!!! at Observer");
+        // FXRobot fxrobot = FXRobotFactory.createRobot(scene);
+        // fxrobot.keyPress(javafx.scene.input.KeyCode.LEFT);
+        // // ALERT_AUDIOCLIP.play();
+        // if (browser != null) {
+        // Platform.runLater(new Runnable() {
+        //
+        // @Override
+        // public void run() {
+        // browser.gotoPrevPage();
+        // }
+        // });
+        // }
+        //
+        // } else if (newValue.getDirection() == Direction.RIGHT) {
+        // System.out.println("  Swiped Right!!! at Observer");
+        // FXRobot fxrobot = FXRobotFactory.createRobot(scene);
+        // fxrobot.keyPress(javafx.scene.input.KeyCode.RIGHT);
+        // // ALERT_AUDIOCLIP.play();
+        // Robot robot = com.sun.glass.ui.Application.GetApplication().createRobot();
+        // robot.keyPress(KeyCode.RIGHT.impl_getCode());
+        //
+        // if (browser != null) {
+        // Platform.runLater(new Runnable() {
+        //
+        // @Override
+        // public void run() {
+        // browser.gotoNextPage();
+        // }
+        // });
+        // }
+        // }
+        // }
+        // }
+        // });
 
     }
 
     @Override
     public void stop() {
-        leapController.removeListener(listener);
-
+        leapController.removeListener(menuController);
     }
 
     public static void main(String[] args) throws IOException {

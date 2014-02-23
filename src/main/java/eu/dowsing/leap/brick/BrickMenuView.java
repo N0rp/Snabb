@@ -12,7 +12,6 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBuilder;
 import eu.dowsing.leap.brick.HandRect.Importance;
-import eu.dowsing.leap.brick.HandRect.Position;
 
 /**
  * Contains all visualizations for the leap motion control
@@ -59,15 +58,52 @@ public class BrickMenuView extends Pane {
     public void clearHands() {
         for (List<HandRect> rectangles : this.categories) {
             for (HandRect rect : rectangles) {
-                rect.hide();
+                rect.setVisible(false);
             }
         }
     }
 
-    public void showHand(int category, int subcategory, Importance importance, Position position, int fingerCount) {
-        List<HandRect> subcategories = categories.get(category);
-        HandRect rect = subcategories.get(subcategory);
-        rect.showHand(importance, position, fingerCount);
+    /**
+     * Show only the indicators for the given category
+     * 
+     * @param category
+     */
+    public void showCategoryHint(Brick hand) {
+        if (hand.getCategory() >= 0) {
+            // hide everything
+            setCategoryHintVisibile(false);
+            // show category menu if hand in right position
+            if (hand.getSubCategory() == 0 || hand.getSubCategory() + 1 == adapter.getSubCategories(hand.getCategory())) {
+                // if the hand is at either end
+                for (List<HandRect> subCategories : this.categories) {
+                    for (int i = 0; i < subCategories.size(); i++) {
+                        HandRect rect = subCategories.get(i);
+                        rect.setHintVisible(i == hand.getSubCategory());
+                    }
+                }
+            }
+            // show sub categories
+            List<HandRect> subCategories = categories.get(hand.getCategory());
+            for (HandRect rect : subCategories) {
+                rect.setHintVisible(true);
+            }
+        } else {
+            setCategoryHintVisibile(true);
+        }
+    }
+
+    private void setCategoryHintVisibile(boolean visible) {
+        for (List<HandRect> subCategory : this.categories) {
+            for (HandRect rect : subCategory) {
+                rect.setHintVisible(visible);
+            }
+        }
+    }
+
+    public void showHand(Importance importance, Brick hand) {
+        List<HandRect> subcategories = categories.get(hand.getCategory());
+        HandRect rect = subcategories.get(hand.getSubCategory());
+        rect.showHand(importance, hand.getHandRoll(), hand.getFingerCount());
     }
 
     /**
