@@ -104,18 +104,34 @@ public class HandRect {
         }
     }
 
-    public void showHand(Importance importance, Position pos, int fingerCount) {
+    /**
+     * Show the hand
+     * 
+     * @param importance
+     * @param pos
+     * @param fingerCount
+     * @param handledGesture
+     */
+    public void showHand(Importance importance, Position pos, int fingerCount, boolean handledGesture) {
         // first all rectangles visible
         setVisible(true);
 
         // hide vertical or horizontal position
+        Color fill = getHandColor(importance);
         if (pos == Position.HORIZONTAL) {
-            horizontal.setFill(getHandColor(importance));
             vertical.setVisible(false);
         } else if (pos == Position.VERTICAL) {
             horizontal.setVisible(false);
-            vertical.setFill(getHandColor(importance));
         }
+
+        // notify the user that the gesture was handled
+        if (handledGesture) {
+            fill = Color.web("yellow", 1);
+        }
+
+        // color the rectangles
+        horizontal.setFill(fill);
+        vertical.setFill(fill);
 
         // then we hide invisible fingers
         for (int i = fingerCount; i < fingerRects.length; i++) {

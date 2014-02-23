@@ -1,5 +1,8 @@
 package eu.dowsing.leap.brick;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -69,13 +72,45 @@ public class BrickMenuController extends Listener {
     /** Id of the secondary controlling hand. -1 if there is no secondary Hand. **/
     private int secondaryId = BrickMenuController.NO_ID;
 
+    /** If true a gesture has been recognized and the hands need to be reset into non-active by the user. **/
+    private boolean activeGestureResponse = false;
+
+    private List<ActiveMovementListener> activeMovementListener = new LinkedList<>();
+
     private BrickMenuView view;
 
     private BrickMenuAdapterInterface adapter;
 
+    private BrickGesture gesture = new BrickGesture();
+
     public BrickMenuController(BrickMenuView view, BrickMenuAdapterInterface adapter) {
         this.view = view;
         this.adapter = adapter;
+    }
+
+    public void addActiveMovementListener(ActiveMovementListener listener) {
+        this.activeMovementListener.add(listener);
+    }
+
+    public void removeActiveMovementListener(ActiveMovementListener listener) {
+        this.activeMovementListener.remove(listener);
+    }
+
+    /**
+     * Notifies listeners and returns if at most one of them has handled the gesture.
+     * 
+     * @return <code>true</code> if the gesture was handled by at most one listener, else <code>false</code>
+     */
+    private boolean notifyActiveMovementListener() {
+        boolean handled = false;
+        for (ActiveMovementListener listener : this.activeMovementListener) {
+            handled |= listener.onActiveMovement(gesture);
+            if (handled) {
+                // only allow the first listener to handle gesture
+                break;
+            }
+        }
+        return handled;
     }
 
     @Override
@@ -100,6 +135,8 @@ public class BrickMenuController extends Listener {
                 handleGestures(controller, frame.gestures());
 
             }
+        } else {
+            gesture.clear();
         }
     }
 
@@ -180,15 +217,34 @@ public class BrickMenuController extends Listener {
         final Hand primary = getPrimaryHand(hands);
         final Hand secondary = getSecondaryHand(hands);
 
+        boolean activeMovement = gesture.addHands(primary, secondary, adapter);
+        final Brick prim = gesture.getPrimary();
+        final Brick sec = gesture.getSecondary();
+
+        if ((prim == null || !prim.isActive()) && (sec == null || !sec.isActive())) {
+            // reset gesture notification
+            this.activeGestureResponse = false;
+            this.gesture.clear();
+        }
+
+        // if a movement was found but no gesture listener has responded a gesture
+        if (activeMovement && !this.activeGestureResponse) {
+            // remember if one of the listeners has responded to the gesture
+            System.out.println("Notifying gesture listener with " + gesture);
+            this.activeGestureResponse = notifyActiveMovementListener();
+            if (this.activeGestureResponse) {
+                System.out.println("GEsture was handled");
+            }
+        }
+
         view.clearHands();
         Platform.runLater(new Runnable() {
 
             @Override
             public void run() {
                 if (primary != null) {
-                    Brick prim = new Brick(primary, adapter);
                     if (prim.getSubCategory() >= 0) {
-                        view.showHand(Importance.PRIMARY, prim);
+                        view.showHand(Importance.PRIMARY, prim, activeGestureResponse);
                     }
 
                     view.showCategoryHint(prim);
@@ -198,7 +254,7 @@ public class BrickMenuController extends Listener {
                     // System.out.println("Found Secondary");
                     Brick sec = new Brick(secondary, adapter);
                     if (sec.getSubCategory() >= 0) {
-                        view.showHand(Importance.SECONDARY, sec);
+                        view.showHand(Importance.SECONDARY, sec, activeGestureResponse);
                     }
                 }
             }
@@ -243,6 +299,11 @@ public class BrickMenuController extends Listener {
                     }
                 }
             }
+        }
+
+        // make sure at least one hand is picked
+        if (current == null && hands.count() > 0 && hands.get(0).id() != excludeId) {
+            return hands.get(0);
         }
 
         return current;

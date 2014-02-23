@@ -100,10 +100,20 @@ public class BrickMenuView extends Pane {
         }
     }
 
-    public void showHand(Importance importance, Brick hand) {
+    /**
+     * Display the given hand using the brick menu.
+     * 
+     * @param importance
+     *            if the hand is of primary or secondary importance
+     * @param hand
+     *            the hand to display
+     * @param handledGesture
+     *            if <code>true</code> a gesture was handled which should be displayed.
+     */
+    public void showHand(Importance importance, Brick hand, boolean handledGesture) {
         List<HandRect> subcategories = categories.get(hand.getCategory());
         HandRect rect = subcategories.get(hand.getSubCategory());
-        rect.showHand(importance, hand.getHandRoll(), hand.getFingerCount());
+        rect.showHand(importance, hand.getHandRoll(), hand.getFingerCount(), handledGesture);
     }
 
     /**

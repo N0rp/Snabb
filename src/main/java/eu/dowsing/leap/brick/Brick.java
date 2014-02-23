@@ -13,23 +13,93 @@ public class Brick {
     }
 
     private int category;
+    private int maxCategory;
     private int subCategory;
+    private int maxSubCategory;
     private int fingerCount;
     private Position handRoll;
 
     public Brick(Hand hand, BrickMenuAdapterInterface adapter) {
         this.category = getCategory(hand, adapter);
+        if (this.category >= 0) {
+            maxCategory = adapter.getCategories() - 1;
+        }
         this.subCategory = getSubCategory(category, hand, adapter);
+        if (category >= 0) {
+            maxSubCategory = adapter.getSubCategories(category) - 1;
+        }
         this.fingerCount = hand.fingers().count();
         this.handRoll = getHandRoll(hand);
+    }
+
+    @Override
+    public String toString() {
+        String str = "Brick";
+        str += "[" + category + "|" + subCategory + "] max [" + maxCategory + "|" + maxSubCategory + "] <"
+                + fingerCount + ">";
+        return str;
     }
 
     public int getCategory() {
         return this.category;
     }
 
+    /**
+     * Returns if the hand is completely on the left side.
+     * 
+     * @return
+     */
+    public boolean isLeft() {
+        return getSubCategory() == 0;
+    }
+
+    /**
+     * Returns if the hand is almost completely on the left side.
+     * 
+     * @return
+     */
+    public boolean isAlmostLeft() {
+        return getSubCategory() == 0 || getSubCategory() == 1;
+    }
+
+    /**
+     * Returns if the hand is completely on the right side.
+     * 
+     * @return
+     */
+    public boolean isRight() {
+        return getSubCategory() == getMaxSubCategory();
+    }
+
+    /**
+     * Returns if the hand is almost completely on the right side.
+     * 
+     * @return
+     */
+    public boolean isAlmostRight() {
+        return getSubCategory() == getMaxSubCategory() || getSubCategory() == getMaxSubCategory() - 1;
+    }
+
+    /**
+     * Get the maximum allowed category.
+     * 
+     * @return
+     */
+    public int getMaxCategory() {
+        return this.maxCategory;
+    }
+
     public int getSubCategory() {
         return this.subCategory;
+    }
+
+    /**
+     * Get the maximum allowed subcategory in the current subcategory.
+     * 
+     * @return
+     */
+    public int getMaxSubCategory() {
+        return this.maxSubCategory;
     }
 
     public int getFingerCount() {

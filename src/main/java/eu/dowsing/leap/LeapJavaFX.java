@@ -12,15 +12,22 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextBuilder;
 import javafx.stage.Stage;
 
 import com.leapmotion.leap.Controller;
 import com.leapmotion.leap.Gesture;
 
+import eu.dowsing.leap.brick.ActiveMovementListener;
+import eu.dowsing.leap.brick.BrickGesture;
 import eu.dowsing.leap.brick.BrickMenuAdapterInterface;
 import eu.dowsing.leap.brick.BrickMenuController;
 import eu.dowsing.leap.brick.BrickMenuView;
 import eu.dowsing.leap.brick.presentation.BasicMenuAdapter;
+import eu.dowsing.leap.brick.presentation.PresentationController;
 import eu.dowsing.leap.pres.Browser;
 import eu.dowsing.leap.pres.Browser.UrlLocation;
 import eu.dowsing.leap.pres.PageLoadCompleteListener;
@@ -41,6 +48,7 @@ public class LeapJavaFX extends Application {
 
     private Pane root;
     private Circle circle = new Circle(50, Color.DEEPSKYBLUE);
+    private Text debugText;
 
     private MainProperties mainPropManager = MainProperties.getInstance();
 
@@ -86,16 +94,18 @@ public class LeapJavaFX extends Application {
         this.root = null;
 
         // create all possible screens
-        initScreens();
+        initScreens(primaryStage, menuController);
 
         // pick one of the possible screens
         Pane currentRoot = null;
         if (visualize == Visualize.Test) {
             primaryStage.setTitle("Leap Test View");
             currentRoot = screens.get(Visualize.Test);
+            dC.setActive(true);
         } else if (visualize == Visualize.Presentation) {
             primaryStage.setTitle("Presentation");
             currentRoot = screens.get(Visualize.Presentation);
+            pC.setActive(true);
         }
 
         this.root = new StackPane();
@@ -108,22 +118,30 @@ public class LeapJavaFX extends Application {
 
         primaryStage.setScene(scene);
         primaryStage.show();
+
     }
 
-    private void initScreens() {
-        this.screens.put(Visualize.Test, createScreen(Visualize.Test));
-        this.screens.put(Visualize.Presentation, createScreen(Visualize.Presentation));
+    private ScreenController pC;
+    private ScreenController dC;
+
+    private void initScreens(final Stage stage, BrickMenuController menuController) {
+        this.screens.put(Visualize.Test, createScreen(stage, Visualize.Test, menuController));
+        this.screens.put(Visualize.Presentation, createScreen(stage, Visualize.Presentation, menuController));
     }
 
-    private Pane createScreen(Visualize visualize) {
+    private Pane createScreen(final Stage stage, Visualize visualize, BrickMenuController menuController) {
         if (visualize == Visualize.Test) {
             Pane current = new AnchorPane();
             loadCircleDisplay(current);
+
+            dC = new DebugController(stage, debugText);
+            menuController.addActiveMovementListener((DebugController) dC);
             return current;
         } else if (visualize == Visualize.Presentation) {
             // VBox box = new VBox();
             this.browser = new Browser(Browser.LOCAL_PRES, UrlLocation.Local);
-
+            pC = new PresentationController(stage, browser);
+            menuController.addActiveMovementListener((PresentationController) pC);
             Pane pane = new StackPane();
             pane.getChildren().add(browser);
 
@@ -158,6 +176,15 @@ public class LeapJavaFX extends Application {
                 }
             });
 
+            menuController.addActiveMovementListener(new ActiveMovementListener() {
+
+                @Override
+                public boolean onActiveMovement(BrickGesture gesture) {
+                    // TODO Auto-generated method stub
+                    return false;
+                }
+            });
+
             return pane;
         } else {
             return null;
@@ -183,6 +210,10 @@ public class LeapJavaFX extends Application {
         circle.setLayoutX(circle.getRadius());
         circle.setLayoutY(circle.getRadius());
         root.getChildren().add(circle);
+
+        debugText = TextBuilder.create().text("Overlay").translateY(100).font(Font.font("Arial", FontWeight.BOLD, 18))
+                .fill(Color.BLUE).build();
+
         // circle.setLayoutX(circle.getRadius());
         // circle.setLayoutY(circle.getRadius());
         // root.getChildren().add(circle);
