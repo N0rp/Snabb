@@ -29,7 +29,9 @@ public class HandRect {
     private Rectangle vertical;
     private Rectangle[] fingerRects;
 
-    private Circle indicator;
+    private Circle hint;
+    /** Hints at where the gesture started. **/
+    private Circle startHint;
 
     public HandRect(Pane p, int rectHeight, int rectWidth, int rectX, int rectY, int miniRectHeight, int miniRectWidth) {
         drawIndicator(p, rectHeight, rectWidth, rectX, rectY, miniRectHeight, miniRectWidth);
@@ -53,9 +55,13 @@ public class HandRect {
         final int vHeight = hWidth / 2;
 
         // create the circle indicating where the hand can be
-        this.indicator = CircleBuilder.create().radius(hHeight / 2).centerX(rectX + (hWidth / 2) - (hHeight / 2))
+        this.hint = CircleBuilder.create().radius(hHeight / 2).centerX(rectX + (hWidth / 2) - (hHeight / 2))
                 .centerY(rectY + (hHeight / 2)).fill(Color.web("grey", 0.1)).build();
-        p.getChildren().add(indicator);
+        p.getChildren().add(hint);
+        // create the circle indicating where the gesture started
+        this.startHint = CircleBuilder.create().radius(hHeight / 2).centerX(rectX + (hWidth / 2) - (hHeight / 2))
+                .centerY(rectY + (hHeight / 2)).fill(Color.web("grey", 0.1)).build();
+        p.getChildren().add(startHint);
 
         // create the rectangle indicating position of the hand
         horizontal = RectangleBuilder.create().height(hHeight).width(hRealWidth).arcHeight(0).arcWidth(0)
@@ -104,6 +110,12 @@ public class HandRect {
         }
     }
 
+    public void setShowGestureStart(Importance importance) {
+        Color fill = getHandColor(importance);
+        this.startHint.setVisible(true);
+        this.startHint.setFill(fill);
+    }
+
     /**
      * Show the hand
      * 
@@ -145,6 +157,9 @@ public class HandRect {
      * @param visible
      */
     public void setVisible(boolean visible) {
+        hint.setVisible(visible);
+        startHint.setVisible(visible);
+
         horizontal.setVisible(visible);
         vertical.setVisible(visible);
         for (Rectangle rect : this.fingerRects) {
@@ -158,7 +173,7 @@ public class HandRect {
      * @param visible
      */
     public void setHintVisible(boolean visible) {
-        this.indicator.setVisible(visible);
+        this.hint.setVisible(visible);
     }
 
 }

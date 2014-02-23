@@ -37,7 +37,7 @@ public class PresentationController implements ActiveMovementListener, ScreenCon
                 Platform.runLater(new Runnable() {
                     public void run() {
                         System.out.println("Gesture is left to right");
-                        browser.gotoNextPage();
+                        browser.gotoPrevPage();
                     }
                 });
                 return true;
@@ -46,7 +46,7 @@ public class PresentationController implements ActiveMovementListener, ScreenCon
                 Platform.runLater(new Runnable() {
                     public void run() {
                         System.out.println("Gesture is right to left");
-                        browser.gotoPrevPage();
+                        browser.gotoNextPage();
                     }
                 });
                 return true;

@@ -244,7 +244,7 @@ public class BrickMenuController extends Listener {
             public void run() {
                 if (primary != null) {
                     if (prim.getSubCategory() >= 0) {
-                        view.showHand(Importance.PRIMARY, prim, activeGestureResponse);
+                        view.showHand(Importance.PRIMARY, prim, activeGestureResponse, gesture.getPrimaryActiveStart());
                     }
 
                     view.showCategoryHint(prim);
@@ -254,7 +254,8 @@ public class BrickMenuController extends Listener {
                     // System.out.println("Found Secondary");
                     Brick sec = new Brick(secondary, adapter);
                     if (sec.getSubCategory() >= 0) {
-                        view.showHand(Importance.SECONDARY, sec, activeGestureResponse);
+                        view.showHand(Importance.SECONDARY, sec, activeGestureResponse,
+                                gesture.getSecondaryActiveStart());
                     }
                 }
             }

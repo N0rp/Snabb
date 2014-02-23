@@ -7,6 +7,12 @@ import com.leapmotion.leap.Hand;
 
 public class BrickGesture {
 
+    /**
+     * The type of the brick gesture.
+     * 
+     * @author richardg
+     * 
+     */
     public enum GestureType {
         /** when primary hand goes from complete left to complete right side. **/
         LEFT2RIGHT,
@@ -203,8 +209,8 @@ public class BrickGesture {
                     return GestureType.ALMOST_RIGHT2LEFT;
                 } else if (secStart != null && secStart != secEnd) {
                     // use Math.floor and Math.ceil on the max subcategory instead
-                    final int Middle4Left = 2;
-                    final int Middle4Right = 3;
+                    final int Middle4Left = (int) Math.floor((double) primStart.getMaxSubCategory() / 2);
+                    final int Middle4Right = (int) Math.ceil((double) primStart.getMaxSubCategory() / 2);
                     if (// right hand moved from right middle to right end
                     (primStart.getSubCategory() == Middle4Right
                             && primEnd.getSubCategory() == primEnd.getMaxSubCategory()

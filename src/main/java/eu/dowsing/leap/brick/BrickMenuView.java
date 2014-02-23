@@ -110,10 +110,14 @@ public class BrickMenuView extends Pane {
      * @param handledGesture
      *            if <code>true</code> a gesture was handled which should be displayed.
      */
-    public void showHand(Importance importance, Brick hand, boolean handledGesture) {
-        List<HandRect> subcategories = categories.get(hand.getCategory());
-        HandRect rect = subcategories.get(hand.getSubCategory());
+    public void showHand(Importance importance, Brick hand, boolean handledGesture, Brick gestureStart) {
+        HandRect rect = categories.get(hand.getCategory()).get(hand.getSubCategory());
         rect.showHand(importance, hand.getHandRoll(), hand.getFingerCount(), handledGesture);
+
+        if (gestureStart != null && gestureStart.getCategory() >= 0 && gestureStart.getSubCategory() >= 0) {
+            HandRect startHint = categories.get(gestureStart.getCategory()).get(gestureStart.getSubCategory());
+            startHint.setShowGestureStart(importance);
+        }
     }
 
     /**

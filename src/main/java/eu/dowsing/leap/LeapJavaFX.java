@@ -58,7 +58,7 @@ public class LeapJavaFX extends Application {
         // ALERT_AUDIOCLIP = new AudioClip("file://" + f.getAbsolutePath());
     }
 
-    private Visualize visualize = Visualize.Test;
+    private Visualize visualize = Visualize.Presentation;
 
     private Browser browser;
 
