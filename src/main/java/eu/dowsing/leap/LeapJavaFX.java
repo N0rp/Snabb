@@ -75,8 +75,10 @@ public class LeapJavaFX extends Application {
 
     private BrickMenuView overlay;
 
-    private final int sceneWidth = 700;
-    private final int sceneHeight = 400;
+    private final int sceneWidth = 800;
+    private final int sceneHeight = 600;
+
+    private final boolean playFirstTrack = false;
 
     @Override
     public void start(Stage primaryStage) {
@@ -324,13 +326,15 @@ public class LeapJavaFX extends Application {
                 System.out.println("Metadata is " + media.getMetadata());
                 final MediaPlayer player = new MediaPlayer(media);
 
-                (new Thread(new Runnable() {
+                if (playFirstTrack) {
+                    (new Thread(new Runnable() {
 
-                    @Override
-                    public void run() {
-                        player.play();
-                    }
-                })).start();
+                        @Override
+                        public void run() {
+                            player.play();
+                        }
+                    })).start();
+                }
             } catch (UnsupportedEncodingException e) {
                 // TODO Auto-generated catch block
                 e.printStackTrace();

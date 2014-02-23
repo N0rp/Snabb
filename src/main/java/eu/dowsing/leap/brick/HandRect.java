@@ -56,11 +56,11 @@ public class HandRect {
 
         // create the circle indicating where the hand can be
         this.hint = CircleBuilder.create().radius(hHeight / 2).centerX(rectX + (hWidth / 2) - (hHeight / 2))
-                .centerY(rectY + (hHeight / 2)).fill(Color.web("grey", 0.1)).build();
+                .centerY(rectY + (hHeight / 2)).fill(Color.web("grey", 0.1)).stroke(Color.BLACK).build();
         p.getChildren().add(hint);
         // create the circle indicating where the gesture started
         this.startHint = CircleBuilder.create().radius(hHeight / 2).centerX(rectX + (hWidth / 2) - (hHeight / 2))
-                .centerY(rectY + (hHeight / 2)).fill(Color.web("grey", 0.1)).build();
+                .centerY(rectY + (hHeight / 2)).fill(Color.web("grey", 0.1)).stroke(Color.BLACK).build();
         p.getChildren().add(startHint);
 
         // create the rectangle indicating position of the hand
