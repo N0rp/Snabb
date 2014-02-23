@@ -1,7 +1,12 @@
 package eu.dowsing.leap;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import javafx.application.Application;
@@ -10,6 +15,8 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
@@ -191,19 +198,19 @@ public class LeapJavaFX extends Application {
         }
     }
 
-    private void loadPdf() {
+    // private void loadPdf() {
 
-        // PdfDecoder pdf = new PdfDecoder();
-        //
-        // try {
-        // pdf.openPdfFile("res/doc/Teshttp://open.spotify.com/track/7FoMWu6ddV7qMP7itqWoLEt.pdf");
-        // } catch (PdfException e) {
-        // // TODO Auto-generated catch block
-        // e.printStackTrace();
-        // }
-        // showPage(1);
+    // PdfDecoder pdf = new PdfDecoder();
+    //
+    // try {
+    // pdf.openPdfFile("res/doc/Teshttp://open.spotify.com/track/7FoMWu6ddV7qMP7itqWoLEt.pdf");
+    // } catch (PdfException e) {
+    // // TODO Auto-generated catch block
+    // e.printStackTrace();
+    // }
+    // showPage(1);
 
-    }
+    // }
 
     private void loadCircleDisplay(final Pane root) {
 
@@ -243,10 +250,95 @@ public class LeapJavaFX extends Application {
         // });
     }
 
+    /**
+     * Get all music tracks in the file.
+     * 
+     * @param parent
+     * @return
+     */
+    private List<File> getTracks(File parent) {
+        List<File> tracks = new LinkedList<>();
+        if (parent.isDirectory()) {
+            for (File child : parent.listFiles()) {
+                // Do something with child
+                if (child.isFile()) {
+                    String extension = "";
+
+                    int i = child.getName().lastIndexOf('.');
+                    if (i > 0) {
+                        extension = child.getName().substring(i + 1);
+                        if (extension.equals("mp3")) {
+                            tracks.add(child);
+                        }
+                    }
+                } else if (child.isDirectory()) {
+                    tracks.addAll(getTracks(child));
+                }
+            }
+        }
+        return tracks;
+    }
+
     private void loadMusic() {
+        File test;
+
+        test = new File("/Users/richardg/Music");
+        if (!test.exists()) {
+            System.err.println("Does not exist: " + test.getName());
+        }
+
         String musicLocation = mainPropManager.getProperty(Key.MUSIC_LOCATION);
         System.out.println("Music is located in: " + musicLocation);
+        File music = new File(musicLocation);
+        List<File> tracks = null;
+        if (music.exists()) {
+            tracks = getTracks(music);
+            if (tracks.size() > 0) {
+                System.out.println("Found " + tracks.size() + " tracks. First track is " + tracks.get(0).getName());
+            } else {
+                System.out.println("Found no music tracks");
+            }
+        } else {
+            System.err.println("Music Location could not be found: " + musicLocation);
+        }
+
+        if (tracks != null && tracks.size() > 0) {
+            String path = tracks.get(0).getAbsolutePath();
+            // path = path.replaceAll("[^a-zA-Z0-9.-]", "_");
+            try {
+                path = URLEncoder.encode(path, "UTF-8");
+                // path = "res/audio/music/Test.mp3";
+
+                // path = "res/audio/beep-07-Soundjay.wav";
+
+                path = "/Users/richardg/Documents/GIT/Snabb/res/audio/music/Test.mp3";
+
+                if (!(new File(path)).exists()) {
+                    System.err.println("File does not exist " + path);
+                }
+
+                // path = "http://download.oracle.com/otndocs/products/javafx/oow2010-2.flv";
+                path = "file://" + path;
+                System.out.println("Loading file: " + path);
+                Media media = new Media(path);
+                System.out.println("Metadata is " + media.getMetadata());
+                final MediaPlayer player = new MediaPlayer(media);
+
+                (new Thread(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        player.play();
+                    }
+                })).start();
+            } catch (UnsupportedEncodingException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
     }
+
+    // private void loadTrack(String )
 
     private void initLeap(final Scene scene) {
         // listener.gestureProperty().addListener(new ChangeListener<Swipy>() {
