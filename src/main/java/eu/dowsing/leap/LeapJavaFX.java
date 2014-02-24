@@ -8,10 +8,15 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -24,15 +29,15 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBuilder;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import com.leapmotion.leap.Controller;
 import com.leapmotion.leap.Gesture;
 
-import eu.dowsing.leap.brick.ActiveMovementListener;
-import eu.dowsing.leap.brick.BrickGesture;
 import eu.dowsing.leap.brick.BrickMenuAdapterInterface;
 import eu.dowsing.leap.brick.BrickMenuController;
 import eu.dowsing.leap.brick.BrickMenuView;
+import eu.dowsing.leap.brick.NumberTypedListener;
 import eu.dowsing.leap.brick.presentation.BasicMenuAdapter;
 import eu.dowsing.leap.brick.presentation.PresentationController;
 import eu.dowsing.leap.pres.Browser;
@@ -59,12 +64,6 @@ public class LeapJavaFX extends Application {
 
     private MainProperties mainPropManager = MainProperties.getInstance();
 
-    public LeapJavaFX() {
-        // File f = new File(mainPropManager.getProperty(Key.BEEP_SOUND));
-        // System.out.println("Absolute file path is : " + f.getAbsolutePath());
-        // ALERT_AUDIOCLIP = new AudioClip("file://" + f.getAbsolutePath());
-    }
-
     private Visualize visualize = Visualize.Presentation;
 
     private Browser browser;
@@ -80,6 +79,16 @@ public class LeapJavaFX extends Application {
 
     private final boolean playFirstTrack = false;
 
+    public final static boolean showLeapMenuOnStart = false;
+
+    private ScheduledExecutorService executorService;
+
+    public LeapJavaFX() {
+        // File f = new File(mainPropManager.getProperty(Key.BEEP_SOUND));
+        // System.out.println("Absolute file path is : " + f.getAbsolutePath());
+        // ALERT_AUDIOCLIP = new AudioClip("file://" + f.getAbsolutePath());
+    }
+
     @Override
     public void start(Stage primaryStage) {
         BrickMenuAdapterInterface menuAdapter = new BasicMenuAdapter();
@@ -87,16 +96,32 @@ public class LeapJavaFX extends Application {
         overlay.setMouseTransparent(true);
         overlay.setAdapter(menuAdapter);
 
-        menuController = new BrickMenuController(overlay, menuAdapter);
+        // create new executor service
+        executorService = Executors.newScheduledThreadPool(1);
 
-        // init leap
-        // leapController.addListener(listener);
-        leapController.addListener(menuController);
+        menuController = new BrickMenuController(leapController, overlay, menuAdapter, executorService);
 
+        // schedule first run, subsequent runs will be schedule by runnable itself
+        executorService.schedule(menuController, 1, TimeUnit.SECONDS);
+
+        // enable leap gestures and set their configuration
         leapController.enableGesture(Gesture.Type.TYPE_SWIPE);
         if (leapController.config().setFloat("Gesture.Swipe.MinLength", 100)
-                && leapController.config().setFloat("Gesture.Swipe.MinVelocity", 250))
+                && leapController.config().setFloat("Gesture.Swipe.MinVelocity", 250)) {
             leapController.config().save();
+        }
+
+        leapController.addListener(menuController);
+
+        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                // stop();
+                System.out.println("OnCloseRequest");
+                // stop();
+                executorService.shutdown();
+            }
+        });
 
         // init view
         this.scene = null;
@@ -124,6 +149,9 @@ public class LeapJavaFX extends Application {
 
         loadMusic();
         initLeap(scene);
+
+        // KeyEvent.KEY_RELEASED
+        primaryStage.addEventHandler(KeyEvent.KEY_PRESSED, menuController);
 
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -154,6 +182,16 @@ public class LeapJavaFX extends Application {
             Pane pane = new StackPane();
             pane.getChildren().add(browser);
 
+            menuController.addNumberTypedListener(new NumberTypedListener() {
+
+                @Override
+                public void onNumberUpdate(int number, boolean isSubmitted) {
+                    if (isSubmitted) {
+                        browser.gotoPage(number - 1);
+                    }
+                }
+            });
+
             // Label test = new Label("Test");
             // box.getChildren().add(test);
             // box.getChildren().add(browser);
@@ -166,7 +204,7 @@ public class LeapJavaFX extends Application {
                         @Override
                         public void run() {
                             System.out.println("Slide changed");
-                            overlay.setText(slideIndex + "");
+                            overlay.setCurrentStepText(slideIndex + "");
                         }
                     });
                 }
@@ -179,18 +217,9 @@ public class LeapJavaFX extends Application {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            overlay.setText("Fertig");
+                            overlay.setCurrentKeyInputText("Laden Fertig");
                         }
                     });
-                }
-            });
-
-            menuController.addActiveMovementListener(new ActiveMovementListener() {
-
-                @Override
-                public boolean onActiveMovement(BrickGesture gesture) {
-                    // TODO Auto-generated method stub
-                    return false;
                 }
             });
 
@@ -392,6 +421,8 @@ public class LeapJavaFX extends Application {
 
     @Override
     public void stop() {
+        System.out.println("JavaFx stop");
+        executorService.shutdown();
         leapController.removeListener(menuController);
     }
 

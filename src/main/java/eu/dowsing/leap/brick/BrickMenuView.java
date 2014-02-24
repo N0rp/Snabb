@@ -25,7 +25,8 @@ public class BrickMenuView extends Pane {
         PRIMARY, SECONDARY
     }
 
-    private Text txt;
+    private Text currentStep;
+    private Text currentKeyInput;
 
     private List<List<HandRect>> categories = new LinkedList<>();
 
@@ -46,9 +47,15 @@ public class BrickMenuView extends Pane {
         getChildren().add(noadapter);
     }
 
-    public void setText(String text) {
-        if (this.txt != null) {
-            this.txt.setText(text);
+    public void setCurrentStepText(String text) {
+        if (this.currentStep != null) {
+            this.currentStep.setText(text);
+        }
+    }
+
+    public void setCurrentKeyInputText(String text) {
+        if (this.currentKeyInput != null) {
+            this.currentKeyInput.setText(text);
         }
     }
 
@@ -135,8 +142,20 @@ public class BrickMenuView extends Pane {
         // Rectangle r = RectangleBuilder.create().height(100).width(100).arcHeight(200).arcWidth(200).stroke(Color.RED)
         // .fill(Color.web("red", 0.1)).translateY(100).build();
 
-        this.txt = TextBuilder.create().text("Overlay").translateY(100).font(Font.font("Arial", FontWeight.BOLD, 18))
-                .fill(Color.BLUE).build();
+        int fontWeight = 18;
+
+        // int txtX = this.sceneHeight - rectHeight; // rectangle on bottom edge
+        // int txtY = this.sceneHeight - rectHeight; // rectangle on bottom edge
+        this.currentStep = TextBuilder.create().text("Overlay").translateY(fontWeight).translateX(sceneWidth / 2)
+                .font(Font.font("Arial", FontWeight.BOLD, fontWeight)).fill(Color.BLUE).build();
+        this.currentKeyInput = TextBuilder.create().text("Overlay").translateY(fontWeight * 2)
+                .translateX(sceneWidth / 2).font(Font.font("Arial", FontWeight.BOLD, fontWeight)).fill(Color.RED)
+                .build();
+        getChildren().addAll(currentStep);
+        getChildren().addAll(currentKeyInput);
+        // int txtWidth = (int) txt.getBoundsInLocal().getWidth();
+        // int txtHeight = (int) txt.getBoundsInLocal().getHeight();
+        // System.out.println("->Overlay txt witdht is " + txtWidth);
 
         // Rectangle left = RectangleBuilder.create().height(100).width(100).arcHeight(0).arcWidth(0).stroke(Color.BLUE)
         // .fill(Color.web("blue", 0.1)).translateX(100).build();
@@ -144,7 +163,7 @@ public class BrickMenuView extends Pane {
         // Rectangle right = RectangleBuilder.create().height(100).width(100).arcHeight(400).arcWidth(0)
         // .stroke(Color.GREEN).fill(Color.web("green", 0.1)).translateX(200).translateY(200).build();
         // p.getChildren().addAll(r, txt, left, right);
-        getChildren().addAll(txt);
+
         // create horizontal rectangles to display leap location
         createHorizontalRectangles(this, 5);
     }

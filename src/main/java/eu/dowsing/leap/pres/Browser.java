@@ -114,7 +114,7 @@ public class Browser extends Region {
                                 if (step >= 0) {
                                     setSlideIndex(step);
                                 }
-                                System.out.println("!!!Just did a step to " + step);
+                                // System.out.println("!!!Just did a step to " + step);
                             }
                         }
                     }, false);
@@ -163,11 +163,11 @@ public class Browser extends Region {
             String test = "impress.steps";
             Object test1 = (Object) webEngine.executeScript(test);
 
-            System.out.println("Steps result is " + res);
-            System.out.println("Steps element is " + el);
-            System.out.println("Steps array is " + memberSteps);
-            System.out.println("ActiveStep is " + activeStep);
-            System.out.println("Test1 is " + test1);
+            // System.out.println("Steps result is " + res);
+            // System.out.println("Steps element is " + el);
+            // System.out.println("Steps array is " + memberSteps);
+            // System.out.println("ActiveStep is " + activeStep);
+            // System.out.println("Test1 is " + test1);
         }
 
         // JSObject result2 = (JSObject) webEngine.executeScript("impress.steps;");
@@ -215,7 +215,7 @@ public class Browser extends Region {
      * @param index
      */
     private void setSlideIndex(int index) {
-        System.out.println("Slide now: " + index);
+        // System.out.println("Slide now: " + index);
         this.currentSlide = index;
         notifySlideChangedListeners(index);
     }

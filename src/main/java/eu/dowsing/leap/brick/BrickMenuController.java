@@ -2,16 +2,20 @@ package eu.dowsing.leap.brick;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.event.EventHandler;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 
 import com.leapmotion.leap.CircleGesture;
 import com.leapmotion.leap.Controller;
 import com.leapmotion.leap.Frame;
 import com.leapmotion.leap.Gesture;
-import com.leapmotion.leap.Gesture.State;
 import com.leapmotion.leap.GestureList;
 import com.leapmotion.leap.Hand;
 import com.leapmotion.leap.HandList;
@@ -22,7 +26,7 @@ import com.leapmotion.leap.ScreenTapGesture;
 
 import eu.dowsing.leap.brick.HandRect.Importance;
 
-public class BrickMenuController extends Listener {
+public class BrickMenuController extends Listener implements Runnable, EventHandler<KeyEvent> {
 
     /** NO ID FOUND is equal to -1. **/
     private final static int NO_ID = -1;
@@ -77,45 +81,158 @@ public class BrickMenuController extends Listener {
 
     private List<ActiveMovementListener> activeMovementListener = new LinkedList<>();
 
+    private List<NumberTypedListener> numberTypedListener = new LinkedList<>();
+
     private BrickMenuView view;
 
     private BrickMenuAdapterInterface adapter;
 
     private BrickGesture gesture = new BrickGesture();
 
-    public BrickMenuController(BrickMenuView view, BrickMenuAdapterInterface adapter) {
+    private Controller leapController;
+
+    /** Time in milliseconds to wait before clearing pressed keys. **/
+    private final static int KEY_PRESS_CLEAR_THRESHOLD = 1000;
+
+    private final static int SLIDE_JUMP_CLEAR = -1;
+
+    /** order in which allowed keys are pressed. **/
+    private int slideJumpBuffer = SLIDE_JUMP_CLEAR;
+
+    /** Stores when the most recent key press order started. **/
+    private long keyPressStart = 0;
+
+    private ScheduledExecutorService executorService;
+
+    public BrickMenuController(Controller controller, BrickMenuView view, BrickMenuAdapterInterface adapter,
+            ScheduledExecutorService executorService) {
+        this.leapController = controller;
         this.view = view;
         this.adapter = adapter;
+        this.executorService = executorService;
     }
 
-    public void addActiveMovementListener(ActiveMovementListener listener) {
-        this.activeMovementListener.add(listener);
-    }
+    public void run() {
 
-    public void removeActiveMovementListener(ActiveMovementListener listener) {
-        this.activeMovementListener.remove(listener);
+        // make sure the key presses are cleared
+        if (System.currentTimeMillis() - keyPressStart > KEY_PRESS_CLEAR_THRESHOLD) {
+            slideJumpBuffer = 0;
+            Platform.runLater(new Runnable() {
+
+                @Override
+                public void run() {
+                    view.setCurrentKeyInputText("");
+                }
+            });
+        }
+
+        if (!leapController.isConnected() || leapController.frame().hands().count() == 0) {
+            Platform.runLater(new Runnable() {
+
+                @Override
+                public void run() {
+                    view.clearHands();
+                }
+            });
+        }
+
+        // schedule itself to be run again
+        executorService.schedule(this, 1, TimeUnit.SECONDS);
     }
 
     /**
-     * Notifies listeners and returns if at most one of them has handled the gesture.
+     * Returns the digit for the code.
      * 
-     * @return <code>true</code> if the gesture was handled by at most one listener, else <code>false</code>
+     * @param code
+     * @return the number for the keycode, or <code>-1</code> if no digit keycode matches.
      */
-    private boolean notifyActiveMovementListener() {
-        boolean handled = false;
-        for (ActiveMovementListener listener : this.activeMovementListener) {
-            handled |= listener.onActiveMovement(gesture);
-            if (handled) {
-                // only allow the first listener to handle gesture
-                break;
-            }
+    private int getDigit(KeyCode code) {
+        if (code == KeyCode.DIGIT0) {
+            return 0;
+        } else if (code == KeyCode.DIGIT1) {
+            return 1;
+        } else if (code == KeyCode.DIGIT2) {
+            return 2;
+        } else if (code == KeyCode.DIGIT3) {
+            return 3;
+        } else if (code == KeyCode.DIGIT4) {
+            return 4;
+        } else if (code == KeyCode.DIGIT5) {
+            return 5;
+        } else if (code == KeyCode.DIGIT6) {
+            return 6;
+        } else if (code == KeyCode.DIGIT7) {
+            return 7;
+        } else if (code == KeyCode.DIGIT8) {
+            return 8;
+        } else if (code == KeyCode.DIGIT9) {
+            return 9;
+        } else {
+
+            return -1;
         }
-        return handled;
+    }
+
+    @Override
+    public void handle(KeyEvent event) {
+        // here we handle all keyboard events
+
+        // logitech presenter keyboard events are:
+        // F5 / ESCAPE is presentation Start/Pause
+        // PERIOD is blank screen on/off
+        // next/previous slide is not caught here,
+        // probably directed to webview instead, but does what it should anyway
+
+        int digit = getDigit(event.getCode());
+
+        final int slideJump;
+        if (digit >= 0) { // we found a number
+            // test if we found our first value
+            if (slideJumpBuffer == SLIDE_JUMP_CLEAR) {
+                slideJumpBuffer = digit;
+            } else {
+                slideJumpBuffer = (slideJumpBuffer * 10) + digit;
+            }
+            keyPressStart = System.currentTimeMillis();
+            slideJump = SLIDE_JUMP_CLEAR;
+        } else if (event.getCode() == KeyCode.ENTER) {
+            // we submit the order
+            // TODO
+            slideJump = slideJumpBuffer;
+            slideJumpBuffer = SLIDE_JUMP_CLEAR;
+            keyPressStart = System.currentTimeMillis();
+            System.out.println("Submit order!");
+        } else {
+            // on any other key the order is deleted
+            slideJumpBuffer = SLIDE_JUMP_CLEAR;
+            slideJump = SLIDE_JUMP_CLEAR;
+        }
+
+        // System.out.println("Slidejumpbuffer is: " + slideJumpBuffer + " and SlideJump is " + slideJump);
+
+        if (slideJumpBuffer > SLIDE_JUMP_CLEAR) {
+            Platform.runLater(new Runnable() {
+
+                @Override
+                public void run() {
+                    view.setCurrentKeyInputText(slideJumpBuffer + "");
+                }
+            });
+            notifyNumberTypedListener(slideJumpBuffer, false);
+        } else if (slideJump > SLIDE_JUMP_CLEAR) {
+            Platform.runLater(new Runnable() {
+
+                @Override
+                public void run() {
+                    view.setCurrentKeyInputText("OK: " + slideJump + "");
+                }
+            });
+            notifyNumberTypedListener(slideJump, true);
+        }
     }
 
     @Override
     public void onFrame(Controller controller) {
-
         Frame frame = controller.frame();
         if (!frame.hands().isEmpty()) {
             Screen screen = controller.locatedScreens().get(0);
@@ -136,6 +253,7 @@ public class BrickMenuController extends Listener {
 
             }
         } else {
+
             gesture.clear();
         }
     }
@@ -184,7 +302,7 @@ public class BrickMenuController extends Listener {
 
                     // Calculate angle swept since last frame
                     double sweptAngle = 0;
-                    if (circle.state() != State.STATE_START) {
+                    if (circle.state() != Gesture.State.STATE_START) {
                         CircleGesture previousUpdate = new CircleGesture(controller.frame(1).gesture(circle.id()));
                         sweptAngle = (circle.progress() - previousUpdate.progress()) * 2 * Math.PI;
                     }
@@ -237,11 +355,13 @@ public class BrickMenuController extends Listener {
             }
         }
 
-        view.clearHands();
+        // handle view events
         Platform.runLater(new Runnable() {
 
             @Override
             public void run() {
+                view.clearHands();
+
                 if (primary != null) {
                     if (prim.getSubCategory() >= 0) {
                         view.showHand(Importance.PRIMARY, prim, activeGestureResponse, gesture.getPrimaryActiveStart());
@@ -340,5 +460,44 @@ public class BrickMenuController extends Listener {
             this.secondaryId = BrickMenuController.NO_ID;
         }
         return secondary;
+    }
+
+    public void addActiveMovementListener(ActiveMovementListener listener) {
+        this.activeMovementListener.add(listener);
+    }
+
+    public void removeActiveMovementListener(ActiveMovementListener listener) {
+        this.activeMovementListener.remove(listener);
+    }
+
+    /**
+     * Notifies listeners and returns if at most one of them has handled the gesture.
+     * 
+     * @return <code>true</code> if the gesture was handled by at most one listener, else <code>false</code>
+     */
+    private boolean notifyActiveMovementListener() {
+        boolean handled = false;
+        for (ActiveMovementListener listener : this.activeMovementListener) {
+            handled |= listener.onActiveMovement(gesture);
+            if (handled) {
+                // only allow the first listener to handle gesture
+                break;
+            }
+        }
+        return handled;
+    }
+
+    public void addNumberTypedListener(NumberTypedListener listener) {
+        this.numberTypedListener.add(listener);
+    }
+
+    public void removeNumberTypedListener(NumberTypedListener listener) {
+        this.numberTypedListener.remove(listener);
+    }
+
+    private void notifyNumberTypedListener(int number, boolean isSubmitted) {
+        for (NumberTypedListener listener : this.numberTypedListener) {
+            listener.onNumberUpdate(number, isSubmitted);
+        }
     }
 }
