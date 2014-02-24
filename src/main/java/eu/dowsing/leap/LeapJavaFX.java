@@ -16,6 +16,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -90,7 +91,7 @@ public class LeapJavaFX extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) {
+    public void start(final Stage primaryStage) {
         BrickMenuAdapterInterface menuAdapter = new BasicMenuAdapter();
         overlay = new BrickMenuView(this.sceneWidth, this.sceneHeight);
         overlay.setMouseTransparent(true);
@@ -99,7 +100,7 @@ public class LeapJavaFX extends Application {
         // create new executor service
         executorService = Executors.newScheduledThreadPool(1);
 
-        menuController = new BrickMenuController(leapController, overlay, menuAdapter, executorService);
+        menuController = new BrickMenuController(leapController, primaryStage, overlay, menuAdapter, executorService);
 
         // schedule first run, subsequent runs will be schedule by runnable itself
         executorService.schedule(menuController, 1, TimeUnit.SECONDS);
@@ -152,6 +153,31 @@ public class LeapJavaFX extends Application {
 
         // KeyEvent.KEY_RELEASED
         primaryStage.addEventHandler(KeyEvent.KEY_PRESSED, menuController);
+        primaryStage.addEventHandler(KeyEvent.KEY_RELEASED, new EventHandler<KeyEvent>() {
+
+            @Override
+            public void handle(KeyEvent event) {
+
+                // logitech presenter keyboard events are:
+                // F5 / ESCAPE is presentation Start/Pause
+                // PERIOD is blank screen on/off
+                // next/previous slide is not caught here,
+                // probably directed to webview instead, but does what it should anyway
+                if (event.getCode() == KeyCode.F5) {
+                    // go fullscreen
+                    primaryStage.setFullScreen(true);
+                    event.consume();
+                } else if (event.getCode() == KeyCode.ESCAPE) {
+                    // undo fullscreen
+                    primaryStage.setFullScreen(false);
+                    event.consume();
+                } else if (event.getCode() == KeyCode.PERIOD) {
+                    // show blank screen
+                    browser.setVisible(!browser.isVisible());
+                }
+            }
+
+        });
 
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -177,6 +203,8 @@ public class LeapJavaFX extends Application {
         } else if (visualize == Visualize.Presentation) {
             // VBox box = new VBox();
             this.browser = new Browser(Browser.LOCAL_PRES, UrlLocation.Local);
+            overlay.setBrowser(browser);
+
             pC = new PresentationController(stage, browser);
             menuController.addActiveMovementListener((PresentationController) pC);
             Pane pane = new StackPane();
@@ -203,7 +231,7 @@ public class LeapJavaFX extends Application {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            System.out.println("Slide changed");
+                            // System.out.println("Slide changed");
                             overlay.setCurrentStepText(slideIndex + "");
                         }
                     });

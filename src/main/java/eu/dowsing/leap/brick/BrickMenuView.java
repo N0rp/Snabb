@@ -12,6 +12,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBuilder;
 import eu.dowsing.leap.brick.HandRect.Importance;
+import eu.dowsing.leap.pres.Browser;
 
 /**
  * Contains all visualizations for the leap motion control
@@ -37,6 +38,8 @@ public class BrickMenuView extends Pane {
 
     private BrickMenuAdapterInterface adapter;
 
+    private Browser browser;
+
     public BrickMenuView(int sceneWidth, int sceneHeight) {
         this.sceneWidth = sceneHeight;
         this.sceneHeight = sceneHeight;
@@ -47,9 +50,17 @@ public class BrickMenuView extends Pane {
         getChildren().add(noadapter);
     }
 
+    public void setBrowser(Browser browser) {
+        this.browser = browser;
+    }
+
     public void setCurrentStepText(String text) {
         if (this.currentStep != null) {
+            if (browser != null) {
+                text += " - " + browser.getCompletion() + "%";
+            }
             this.currentStep.setText(text);
+
         }
     }
 

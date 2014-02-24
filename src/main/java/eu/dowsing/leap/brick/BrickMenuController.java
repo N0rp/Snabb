@@ -9,8 +9,10 @@ import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.EventHandler;
+import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.stage.Stage;
 
 import com.leapmotion.leap.CircleGesture;
 import com.leapmotion.leap.Controller;
@@ -104,9 +106,12 @@ public class BrickMenuController extends Listener implements Runnable, EventHand
 
     private ScheduledExecutorService executorService;
 
-    public BrickMenuController(Controller controller, BrickMenuView view, BrickMenuAdapterInterface adapter,
-            ScheduledExecutorService executorService) {
+    private Stage stage;
+
+    public BrickMenuController(Controller controller, Stage stage, BrickMenuView view,
+            BrickMenuAdapterInterface adapter, ScheduledExecutorService executorService) {
         this.leapController = controller;
+        this.stage = stage;
         this.view = view;
         this.adapter = adapter;
         this.executorService = executorService;
@@ -173,15 +178,11 @@ public class BrickMenuController extends Listener implements Runnable, EventHand
         }
     }
 
+    private Scene sceneBuffer;
+
     @Override
     public void handle(KeyEvent event) {
         // here we handle all keyboard events
-
-        // logitech presenter keyboard events are:
-        // F5 / ESCAPE is presentation Start/Pause
-        // PERIOD is blank screen on/off
-        // next/previous slide is not caught here,
-        // probably directed to webview instead, but does what it should anyway
 
         int digit = getDigit(event.getCode());
 

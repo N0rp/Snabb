@@ -1,6 +1,8 @@
 package eu.dowsing.leap.pres;
 
 import java.io.File;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.net.MalformedURLException;
 import java.util.LinkedList;
 import java.util.List;
@@ -41,6 +43,8 @@ public class Browser extends Region {
     private List<SlideChangedListener> slideChangedListener = new LinkedList<>();
     private List<PageLoadCompleteListener> pageLoadCompleteListener = new LinkedList<>();
 
+    private int maxStepFound = 1;
+
     /** the url location **/
     public enum UrlLocation {
         /** local file system **/
@@ -70,6 +74,29 @@ public class Browser extends Region {
     }
 
     /**
+     * Get the current known completion in per cent
+     * 
+     * @return completion of the slide in per cent (0 - 100 %)
+     */
+    public double getCompletion() {
+        if (maxStepFound > 0) {
+            double result = (double) currentSlide / (double) maxStepFound * 100.0;
+            return round(result, 1);
+        } else {
+            return 100;
+        }
+    }
+
+    public static double round(double value, int places) {
+        if (places < 0)
+            throw new IllegalArgumentException();
+
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
+    }
+
+    /**
      * Setup the listeners for special events.
      */
     private void setupListeners() {
@@ -81,6 +108,10 @@ public class Browser extends Region {
                 } else if (keyEvent.getCode() == KeyCode.RIGHT || keyEvent.getCode() == KeyCode.DOWN
                         || keyEvent.getCode() == KeyCode.SPACE) {
                     setSlideIndex(currentSlide + 1);
+                } else if (keyEvent.getCode() == KeyCode.ESCAPE) {
+                    // consume escape key, used by logitech presenter to escape fullscreen presentation
+                    // but in impress this triggers the overview, which we do not want to see
+                    keyEvent.consume();
                 }
             }
         });
@@ -102,7 +133,7 @@ public class Browser extends Region {
                                 HTMLDivElement element = (HTMLDivElement) evt.getTarget();
                                 // element id is either step-1, step-2, etc. or overview
 
-                                System.out.println("Event target id is " + element.getId());
+                                // System.out.println("Event target id is " + element.getId());
                                 String target = element.getId();
                                 int step = -1;
                                 if (target.contains("step-")) {
@@ -113,6 +144,10 @@ public class Browser extends Region {
                                 }
                                 if (step >= 0) {
                                     setSlideIndex(step);
+                                    // remember the maximum step
+                                    if (step > maxStepFound) {
+                                        maxStepFound = step;
+                                    }
                                 }
                                 // System.out.println("!!!Just did a step to " + step);
                             }
