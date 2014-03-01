@@ -35,12 +35,12 @@ import javafx.stage.WindowEvent;
 import com.leapmotion.leap.Controller;
 import com.leapmotion.leap.Gesture;
 
-import eu.dowsing.kolla.leap.brick.BrickMenuAdapterInterface;
-import eu.dowsing.kolla.leap.brick.NumberTypedListener;
-import eu.dowsing.kolla.leap.brick.control.BrickMenuController;
-import eu.dowsing.kolla.leap.brick.facade.BrickMenuView;
+import eu.dowsing.kolla.app.presentation.PresentationController;
+import eu.dowsing.kolla.widget.brick.BrickMenuAdapterInterface;
+import eu.dowsing.kolla.widget.brick.NumberTypedListener;
+import eu.dowsing.kolla.widget.brick.control.BrickMenuController;
+import eu.dowsing.kolla.widget.brick.facade.BrickMenuView;
 import eu.dowsing.leap.brick.presentation.BasicMenuAdapter;
-import eu.dowsing.leap.brick.presentation.PresentationController;
 import eu.dowsing.leap.pres.Browser;
 import eu.dowsing.leap.pres.Browser.UrlLocation;
 import eu.dowsing.leap.pres.PageLoadCompleteListener;

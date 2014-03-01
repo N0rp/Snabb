@@ -1,11 +1,11 @@
-package eu.dowsing.kolla.leap.brick.model;
+package eu.dowsing.kolla.widget.brick.model;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import com.leapmotion.leap.Hand;
 
-import eu.dowsing.kolla.leap.brick.BrickMenuAdapterInterface;
+import eu.dowsing.kolla.widget.brick.BrickMenuAdapterInterface;
 
 /**
  * Encapsulates a brick gesture.
@@ -39,19 +39,19 @@ public class BrickGesture {
     }
 
     /** movement the primary hand has made since recognized. **/
-    private List<Brick> primaryMovement = new LinkedList<>();
+    private List<BrickModel> primaryMovement = new LinkedList<>();
     /** movement the primary hand has made since made active. **/
-    private List<Brick> primaryActiveMovement = new LinkedList<>();
+    private List<BrickModel> primaryActiveMovement = new LinkedList<>();
 
     /** Movement the secondary hand has made since recognized. **/
-    private List<Brick> secondaryMovement = new LinkedList<>();
+    private List<BrickModel> secondaryMovement = new LinkedList<>();
     /** Movement the secondary hand has made since made active. **/
-    private List<Brick> secondaryActiveMovement = new LinkedList<>();
+    private List<BrickModel> secondaryActiveMovement = new LinkedList<>();
 
     /** Most recent primary hand or null. **/
-    private Brick prim;
+    private BrickModel prim;
     /** Most recent secondary hand or null. **/
-    private Brick sec;
+    private BrickModel sec;
 
     private GestureType gestureType;
 
@@ -70,11 +70,11 @@ public class BrickGesture {
         return this.gestureType;
     }
 
-    public Brick getPrimary() {
+    public BrickModel getPrimary() {
         return prim;
     }
 
-    public Brick getSecondary() {
+    public BrickModel getSecondary() {
         return sec;
     }
 
@@ -83,7 +83,7 @@ public class BrickGesture {
      * 
      * @return
      */
-    public Brick getPrimaryActiveStart() {
+    public BrickModel getPrimaryActiveStart() {
         if (this.primaryActiveMovement.size() == 0) {
             return null;
         } else {
@@ -96,7 +96,7 @@ public class BrickGesture {
      * 
      * @return
      */
-    public Brick getPrimaryActiveCurrent() {
+    public BrickModel getPrimaryActiveCurrent() {
         if (this.primaryActiveMovement.size() == 0) {
             return null;
         } else {
@@ -109,7 +109,7 @@ public class BrickGesture {
      * 
      * @return
      */
-    public Brick getSecondaryActiveStart() {
+    public BrickModel getSecondaryActiveStart() {
         if (secondaryActiveMovement.size() == 0) {
             return null;
         } else {
@@ -122,7 +122,7 @@ public class BrickGesture {
      * 
      * @return
      */
-    public Brick getSecondaryActiveCurrent() {
+    public BrickModel getSecondaryActiveCurrent() {
         if (secondaryActiveMovement.size() == 0) {
             return null;
         } else {
@@ -148,13 +148,13 @@ public class BrickGesture {
             primaryMovement.clear();
             primaryActiveMovement.clear();
         } else {
-            prim = new Brick(primary, adapter);
+            prim = new BrickModel(primary, adapter);
             primaryMovement.add(prim);
             if (prim.isActive()) {
                 if (primaryActiveMovement.size() == 0) {
                     primaryActiveMovement.add(prim);
                 } else {
-                    Brick last = primaryActiveMovement.get(primaryActiveMovement.size() - 1);
+                    BrickModel last = primaryActiveMovement.get(primaryActiveMovement.size() - 1);
                     if (last.getCategory() != prim.getCategory() || last.getSubCategory() != prim.getSubCategory()) {
                         primaryActiveMovement.add(prim);
                         activeMovement = true;
@@ -168,14 +168,14 @@ public class BrickGesture {
             secondaryMovement.clear();
             secondaryActiveMovement.clear();
         } else {
-            sec = new Brick(secondary, adapter);
+            sec = new BrickModel(secondary, adapter);
             secondaryMovement.add(sec);
             if (sec.isActive()) {
                 if (secondaryActiveMovement.size() == 0) {
                     secondaryActiveMovement.add(sec);
                 } else {
                     // only add if something has changed
-                    Brick last = secondaryActiveMovement.get(secondaryActiveMovement.size() - 1);
+                    BrickModel last = secondaryActiveMovement.get(secondaryActiveMovement.size() - 1);
                     if (last.getCategory() != sec.getCategory() || last.getSubCategory() != sec.getSubCategory()) {
                         secondaryActiveMovement.add(sec);
                         activeMovement = true;
@@ -190,11 +190,11 @@ public class BrickGesture {
     }
 
     private GestureType calculateGestureType() {
-        Brick primStart = getPrimaryActiveStart();
-        Brick primEnd = getPrimaryActiveCurrent();
+        BrickModel primStart = getPrimaryActiveStart();
+        BrickModel primEnd = getPrimaryActiveCurrent();
 
-        Brick secStart = getSecondaryActiveStart();
-        Brick secEnd = getSecondaryActiveCurrent();
+        BrickModel secStart = getSecondaryActiveStart();
+        BrickModel secEnd = getSecondaryActiveCurrent();
 
         if (primStart != null && primStart != primEnd) {
             // if (primEnd.getSubCategory() == 0) {

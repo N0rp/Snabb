@@ -1,4 +1,4 @@
-package eu.dowsing.kolla.leap.brick.facade;
+package eu.dowsing.kolla.widget.brick.facade;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -11,9 +11,9 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBuilder;
-import eu.dowsing.kolla.leap.brick.BrickMenuAdapterInterface;
-import eu.dowsing.kolla.leap.brick.facade.HandRect.Importance;
-import eu.dowsing.kolla.leap.brick.model.Brick;
+import eu.dowsing.kolla.widget.brick.BrickMenuAdapterInterface;
+import eu.dowsing.kolla.widget.brick.facade.BrickView.Importance;
+import eu.dowsing.kolla.widget.brick.model.BrickModel;
 import eu.dowsing.leap.pres.Browser;
 
 /**
@@ -31,7 +31,7 @@ public class BrickMenuView extends Pane {
     private Text currentStep;
     private Text currentKeyInput;
 
-    private List<List<HandRect>> categories = new LinkedList<>();
+    private List<List<BrickView>> categories = new LinkedList<>();
 
     private int sceneWidth;
     private int sceneHeight;
@@ -76,8 +76,8 @@ public class BrickMenuView extends Pane {
      * Will clear the view of displaying any hands
      */
     public void clearHands() {
-        for (List<HandRect> rectangles : this.categories) {
-            for (HandRect rect : rectangles) {
+        for (List<BrickView> rectangles : this.categories) {
+            for (BrickView rect : rectangles) {
                 rect.setVisible(false);
             }
         }
@@ -88,23 +88,23 @@ public class BrickMenuView extends Pane {
      * 
      * @param category
      */
-    public void showCategoryHint(Brick hand) {
+    public void showCategoryHint(BrickModel hand) {
         if (hand.getCategory() >= 0) {
             // hide everything
             setCategoryHintVisibile(false);
             // show category menu if hand in right position
             if (hand.getSubCategory() == 0 || hand.getSubCategory() + 1 == adapter.getSubCategories(hand.getCategory())) {
                 // if the hand is at either end
-                for (List<HandRect> subCategories : this.categories) {
+                for (List<BrickView> subCategories : this.categories) {
                     for (int i = 0; i < subCategories.size(); i++) {
-                        HandRect rect = subCategories.get(i);
+                        BrickView rect = subCategories.get(i);
                         rect.setHintVisible(i == hand.getSubCategory());
                     }
                 }
             }
             // show sub categories
-            List<HandRect> subCategories = categories.get(hand.getCategory());
-            for (HandRect rect : subCategories) {
+            List<BrickView> subCategories = categories.get(hand.getCategory());
+            for (BrickView rect : subCategories) {
                 rect.setHintVisible(true);
             }
         } else {
@@ -113,8 +113,8 @@ public class BrickMenuView extends Pane {
     }
 
     private void setCategoryHintVisibile(boolean visible) {
-        for (List<HandRect> subCategory : this.categories) {
-            for (HandRect rect : subCategory) {
+        for (List<BrickView> subCategory : this.categories) {
+            for (BrickView rect : subCategory) {
                 rect.setHintVisible(visible);
             }
         }
@@ -130,12 +130,12 @@ public class BrickMenuView extends Pane {
      * @param handledGesture
      *            if <code>true</code> a gesture was handled which should be displayed.
      */
-    public void showHand(Importance importance, Brick hand, boolean handledGesture, Brick gestureStart) {
-        HandRect rect = categories.get(hand.getCategory()).get(hand.getSubCategory());
+    public void showHand(Importance importance, BrickModel hand, boolean handledGesture, BrickModel gestureStart) {
+        BrickView rect = categories.get(hand.getCategory()).get(hand.getSubCategory());
         rect.showHand(importance, hand.getHandRoll(), hand.getFingerCount(), handledGesture);
 
         if (gestureStart != null && gestureStart.getCategory() >= 0 && gestureStart.getSubCategory() >= 0) {
-            HandRect startHint = categories.get(gestureStart.getCategory()).get(gestureStart.getSubCategory());
+            BrickView startHint = categories.get(gestureStart.getCategory()).get(gestureStart.getSubCategory());
             startHint.setShowGestureStart(importance);
         }
     }
@@ -198,7 +198,7 @@ public class BrickMenuView extends Pane {
         // draw rectangles
         for (int i = 0; i < adapter.getCategories(); i++) {
             // create space for horizontal rectangles
-            List<HandRect> horizRects = new LinkedList<>();
+            List<BrickView> horizRects = new LinkedList<>();
             categories.add(horizRects);
 
             // create properties for rectangles
@@ -215,7 +215,7 @@ public class BrickMenuView extends Pane {
             int miniRectY = rectY - miniRectHeight - rectMargin;
 
             for (int j = 0; j < rectCount; j++) {
-                horizRects.add(new HandRect(p, rectHeight, rectWidth, rectX, miniRectY, miniRectHeight, miniRectWidth));
+                horizRects.add(new BrickView(p, rectHeight, rectWidth, rectX, miniRectY, miniRectHeight, miniRectWidth));
                 rectX += rectWidth;
             }
             rectY -= (this.sceneWidth / rectCount);

@@ -1,9 +1,9 @@
-package eu.dowsing.kolla.leap.brick.model;
+package eu.dowsing.kolla.widget.brick.model;
 
 import com.leapmotion.leap.Hand;
 import com.leapmotion.leap.Vector;
 
-import eu.dowsing.kolla.leap.brick.BrickMenuAdapterInterface;
+import eu.dowsing.kolla.widget.brick.BrickMenuAdapterInterface;
 
 /**
  * Models the hand
@@ -11,7 +11,7 @@ import eu.dowsing.kolla.leap.brick.BrickMenuAdapterInterface;
  * @author richardg
  * 
  */
-public class Brick {
+public class BrickModel {
 
     /** NO CATEGORY FOUND is equal to -1. **/
     private final static int NO_CAT = -1;
@@ -27,7 +27,7 @@ public class Brick {
     private int fingerCount;
     private Position handRoll;
 
-    public Brick(Hand hand, BrickMenuAdapterInterface adapter) {
+    public BrickModel(Hand hand, BrickMenuAdapterInterface adapter) {
         this.category = getCategory(hand, adapter);
         if (this.category >= 0) {
             maxCategory = adapter.getCategories() - 1;
@@ -181,7 +181,7 @@ public class Brick {
             }
         }
 
-        return Brick.NO_CAT;
+        return BrickModel.NO_CAT;
     }
 
     /**
@@ -193,7 +193,7 @@ public class Brick {
      */
     private int getSubCategory(int category, Hand hand, BrickMenuAdapterInterface adapter) {
         if (category < 0) {
-            return Brick.NO_CAT;
+            return BrickModel.NO_CAT;
         }
         final int min = -200;
         final int max = -min;
@@ -220,7 +220,7 @@ public class Brick {
             }
         }
 
-        return Brick.NO_CAT;
+        return BrickModel.NO_CAT;
     }
 
 }

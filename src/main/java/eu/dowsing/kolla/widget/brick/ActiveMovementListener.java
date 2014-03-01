@@ -1,6 +1,6 @@
-package eu.dowsing.kolla.leap.brick;
+package eu.dowsing.kolla.widget.brick;
 
-import eu.dowsing.kolla.leap.brick.model.BrickGesture;
+import eu.dowsing.kolla.widget.brick.model.BrickGesture;
 
 public interface ActiveMovementListener {
 

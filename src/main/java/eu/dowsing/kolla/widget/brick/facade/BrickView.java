@@ -1,4 +1,4 @@
-package eu.dowsing.kolla.leap.brick.facade;
+package eu.dowsing.kolla.widget.brick.facade;
 
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -9,8 +9,8 @@ import javafx.scene.shape.RectangleBuilder;
 
 import com.leapmotion.leap.Hand;
 
-import eu.dowsing.kolla.leap.brick.model.Brick;
-import eu.dowsing.kolla.leap.brick.model.Brick.Position;
+import eu.dowsing.kolla.widget.brick.model.BrickModel;
+import eu.dowsing.kolla.widget.brick.model.BrickModel.Position;
 
 /**
  * Represents a complete hand including its fingers.
@@ -18,7 +18,7 @@ import eu.dowsing.kolla.leap.brick.model.Brick.Position;
  * @author richardg
  * 
  */
-public class HandRect {
+public class BrickView {
 
     // port(left hand:red) and starboard(right hand:green)
 
@@ -34,7 +34,7 @@ public class HandRect {
     /** Hints at where the gesture started. **/
     private Circle startHint;
 
-    public HandRect(Pane p, int rectHeight, int rectWidth, int rectX, int rectY, int miniRectHeight, int miniRectWidth) {
+    public BrickView(Pane p, int rectHeight, int rectWidth, int rectX, int rectY, int miniRectHeight, int miniRectWidth) {
         drawIndicator(p, rectHeight, rectWidth, rectX, rectY, miniRectHeight, miniRectWidth);
     }
 

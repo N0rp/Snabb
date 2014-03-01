@@ -1,4 +1,4 @@
-package eu.dowsing.kolla.leap.brick;
+package eu.dowsing.kolla.widget.brick;
 
 public interface BrickMenuAdapterInterface {
 

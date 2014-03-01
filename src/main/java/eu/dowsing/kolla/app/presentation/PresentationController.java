@@ -1,11 +1,11 @@
-package eu.dowsing.leap.brick.presentation;
+package eu.dowsing.kolla.app.presentation;
 
 import javafx.application.Platform;
 import javafx.stage.Stage;
 import eu.dowsing.kolla.ScreenController;
-import eu.dowsing.kolla.leap.brick.ActiveMovementListener;
-import eu.dowsing.kolla.leap.brick.model.BrickGesture;
-import eu.dowsing.kolla.leap.brick.model.BrickGesture.GestureType;
+import eu.dowsing.kolla.widget.brick.ActiveMovementListener;
+import eu.dowsing.kolla.widget.brick.model.BrickGesture;
+import eu.dowsing.kolla.widget.brick.model.BrickGesture.GestureType;
 import eu.dowsing.leap.pres.Browser;
 
 public class PresentationController implements ActiveMovementListener, ScreenController {

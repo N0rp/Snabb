@@ -1,4 +1,4 @@
-package eu.dowsing.kolla.leap.brick.control;
+package eu.dowsing.kolla.widget.brick.control;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -26,13 +26,13 @@ import com.leapmotion.leap.Listener;
 import com.leapmotion.leap.Screen;
 import com.leapmotion.leap.ScreenTapGesture;
 
-import eu.dowsing.kolla.leap.brick.ActiveMovementListener;
-import eu.dowsing.kolla.leap.brick.BrickMenuAdapterInterface;
-import eu.dowsing.kolla.leap.brick.NumberTypedListener;
-import eu.dowsing.kolla.leap.brick.facade.BrickMenuView;
-import eu.dowsing.kolla.leap.brick.facade.HandRect.Importance;
-import eu.dowsing.kolla.leap.brick.model.Brick;
-import eu.dowsing.kolla.leap.brick.model.BrickGesture;
+import eu.dowsing.kolla.widget.brick.ActiveMovementListener;
+import eu.dowsing.kolla.widget.brick.BrickMenuAdapterInterface;
+import eu.dowsing.kolla.widget.brick.NumberTypedListener;
+import eu.dowsing.kolla.widget.brick.facade.BrickMenuView;
+import eu.dowsing.kolla.widget.brick.facade.BrickView.Importance;
+import eu.dowsing.kolla.widget.brick.model.BrickGesture;
+import eu.dowsing.kolla.widget.brick.model.BrickModel;
 
 public class BrickMenuController extends Listener implements Runnable, EventHandler<KeyEvent> {
 
@@ -343,8 +343,8 @@ public class BrickMenuController extends Listener implements Runnable, EventHand
         final Hand secondary = getSecondaryHand(hands);
 
         boolean activeMovement = gesture.addHands(primary, secondary, adapter);
-        final Brick prim = gesture.getPrimary();
-        final Brick sec = gesture.getSecondary();
+        final BrickModel prim = gesture.getPrimary();
+        final BrickModel sec = gesture.getSecondary();
 
         if ((prim == null || !prim.isActive()) && (sec == null || !sec.isActive())) {
             // reset gesture notification
@@ -379,7 +379,7 @@ public class BrickMenuController extends Listener implements Runnable, EventHand
 
                 if (secondary != null) {
                     // System.out.println("Found Secondary");
-                    Brick sec = new Brick(secondary, adapter);
+                    BrickModel sec = new BrickModel(secondary, adapter);
                     if (sec.getSubCategory() >= 0) {
                         view.showHand(Importance.SECONDARY, sec, activeGestureResponse,
                                 gesture.getSecondaryActiveStart());
