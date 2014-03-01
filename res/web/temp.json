@@ -1,0 +1,1778 @@
+{
+  "slides": [
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 368,
+          "y": 341,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "text": "First: Wii<br>",
+          "size": 72,
+          "selected": false
+        }
+      ],
+      "z": 0,
+      "impScale": 3,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0,
+      "index": 0,
+      "selected": false,
+      "active": false,
+      "x": 392,
+      "y": 85,
+      "background": "bg-transparent"
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 338,
+          "y": 326,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "text": "Innotalk<br>",
+          "size": 96,
+          "selected": false
+        }
+      ],
+      "z": 0,
+      "impScale": 3,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0,
+      "index": 1,
+      "selected": false,
+      "active": false,
+      "x": 386,
+      "y": 375
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 143,
+          "y": 297,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "text": "<div align=\"center\">Natural User Interfaces<br></div><div align=\"center\">NUI<br></div>",
+          "size": 72,
+          "selected": false,
+          "skewX": 0
+        }
+      ],
+      "z": 0,
+      "impScale": 10,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0,
+      "index": 2,
+      "selected": false,
+      "active": false,
+      "x": 387,
+      "y": 419,
+      "background": "bg-transparent",
+      "surface": "bg-surf-grad-yellow"
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 262,
+          "y": 298,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 72,
+          "text": "<font>Eine Geschichte<br><div style=\"text-align: center;\">in drei Teilen</div></font>",
+          "selected": false
+        }
+      ],
+      "z": 0,
+      "impScale": 3,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0,
+      "index": 3,
+      "selected": false,
+      "active": false,
+      "x": 403,
+      "y": 970
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 341.3333333333333,
+          "y": 341,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 72,
+          "text": "<font>1. Einleitung</font>",
+          "selected": false
+        }
+      ],
+      "z": 0,
+      "impScale": 4,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0,
+      "index": 4,
+      "selected": false,
+      "active": false,
+      "x": 411,
+      "y": 882
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 388,
+          "y": 341,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 72,
+          "text": "<font>2. Technik</font>",
+          "selected": false
+        }
+      ],
+      "z": 0,
+      "impScale": 3,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0,
+      "index": 5,
+      "selected": false,
+      "active": false,
+      "x": 260,
+      "y": 969
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 238,
+          "y": 341,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 72,
+          "text": "<font>3. Wozu das Ganze?</font>",
+          "selected": false
+        }
+      ],
+      "z": 0,
+      "impScale": 3,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0,
+      "index": 6,
+      "selected": false,
+      "active": false,
+      "x": 581,
+      "y": 969
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 341.3333333333333,
+          "y": 341,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 72,
+          "text": "<font>1. Einleitung</font>",
+          "selected": false
+        }
+      ],
+      "z": 0,
+      "impScale": 10,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0,
+      "index": 7,
+      "selected": false,
+      "active": false,
+      "x": 1192,
+      "y": 994,
+      "surface": "bg-surf-grad-yellow"
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 151,
+          "y": 336,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "text": "Am Anfang war das...<br>",
+          "size": 72,
+          "selected": false
+        }
+      ],
+      "z": 0,
+      "impScale": 4,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0,
+      "index": 8,
+      "selected": false,
+      "active": false,
+      "x": 919,
+      "y": 110
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 126,
+          "y": 297,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 72,
+          "text": "<div align=\"center\">CLI<br></div><div align=\"center\">Command Line Interface<br></div>",
+          "selected": false
+        },
+        {
+          "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" viewBox=\"0 0 50 50\" preserveAspectRatio=\"none\"><polygon points=\"25,0 50,50 0,50\"/></svg>",
+          "type": "Shape",
+          "x": 462,
+          "y": 480,
+          "scale": {
+            "width": 100,
+            "height": 100
+          },
+          "selected": false,
+          "rotate": -3.14
+        }
+      ],
+      "z": 0,
+      "impScale": 3,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0,
+      "index": 9,
+      "selected": false,
+      "active": false,
+      "x": 909,
+      "y": 348
+    },
+    {
+      "components": [
+        {
+          "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" viewBox=\"0 0 50 50\" preserveAspectRatio=\"none\"><polygon points=\"25,0 50,50 0,50\"/></svg>",
+          "type": "Shape",
+          "x": 462,
+          "y": 480,
+          "scale": {
+            "width": 100,
+            "height": 100
+          },
+          "selected": false,
+          "rotate": -3.14
+        },
+        {
+          "TextBox": {},
+          "x": 127,
+          "y": 297,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 72,
+          "text": "<div align=\"center\">GUI<br></div><div align=\"center\">Graphical User Interface<br></div>",
+          "selected": false
+        }
+      ],
+      "z": 0,
+      "impScale": 5,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0,
+      "index": 10,
+      "selected": false,
+      "active": false,
+      "x": 990,
+      "y": 452
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 159,
+          "y": 297,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 72,
+          "text": "<div align=\"center\">NUI<br></div><div align=\"center\">Natural User Interface<br></div>",
+          "selected": false
+        },
+        {
+          "markup": "<svg xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\" viewBox=\"0 0 50 50\" preserveAspectRatio=\"none\"><polygon points=\"25,0 50,50 0,50\"/></svg>",
+          "type": "Shape",
+          "x": 462,
+          "y": 480,
+          "scale": {
+            "width": 100,
+            "height": 100
+          },
+          "selected": false,
+          "rotate": -3.14
+        }
+      ],
+      "z": 0,
+      "impScale": 8,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0,
+      "index": 11,
+      "selected": false,
+      "active": false,
+      "x": 1090,
+      "y": 610
+    },
+    {
+      "components": [],
+      "z": 0,
+      "impScale": 10,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0.79,
+      "index": 12,
+      "selected": false,
+      "active": false,
+      "x": 1274,
+      "y": 362,
+      "background": "img:http://i.imgur.com/c6lFgKg.png",
+      "surface": "bg-default"
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 383,
+          "y": 298,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 144,
+          "text": "<font>NUI</font>",
+          "selected": false
+        }
+      ],
+      "z": 0,
+      "impScale": 3,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0,
+      "index": 13,
+      "selected": false,
+      "active": false,
+      "x": 2420,
+      "y": 460,
+      "background": "bg-transparent",
+      "surface": "bg-default"
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 260,
+          "y": 14,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 72,
+          "text": "Wikipedia sagt<br>",
+          "selected": false
+        },
+        {
+          "TextBox": {},
+          "x": 25,
+          "y": 162,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 36,
+          "text": "“In computing, a natural user interface, or NUI, <br>or Natural Interface is the common parlance used by designers <br>and developers of human-machine interfaces to refer <br>to a user interface that is effectively invisible, <br>and remains invisible as the user continuously learns <br>increasingly complex interactions.”<br><br>",
+          "selected": false,
+          "skewX": 0
+        }
+      ],
+      "z": 0,
+      "impScale": 3,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0,
+      "index": 14,
+      "selected": false,
+      "active": false,
+      "x": 2422,
+      "y": 290
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 416,
+          "y": 10,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "text": "<font color=\"#b80000\">WAT?</font>",
+          "size": 72,
+          "selected": false
+        },
+        {
+          "src": "http://i.imgur.com/oTFBYG6.png",
+          "type": "Image",
+          "x": 312,
+          "y": 174,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "imageType": "PNG",
+          "selected": false
+        }
+      ],
+      "z": 0,
+      "impScale": 3,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0,
+      "index": 15,
+      "selected": false,
+      "active": false,
+      "x": 2423,
+      "y": 131,
+      "background": "bg-transparent"
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 243,
+          "y": 298,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "text": "<div style=\"text-align: center;\">Wer kennt</div><font><div style=\"text-align: center;\">Minority Report?</div></font>",
+          "size": 72,
+          "selected": false
+        }
+      ],
+      "z": 0,
+      "impScale": 3,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0,
+      "index": 16,
+      "selected": false,
+      "active": false,
+      "x": 2188,
+      "y": 460
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 275,
+          "y": 67,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "text": "<font>Oblong gSpeak</font>",
+          "size": 72,
+          "selected": false
+        },
+        {
+          "src": "https://dl.dropboxusercontent.com/u/5735957/gSpeak-mpg2.mp4",
+          "type": "Video",
+          "x": 212,
+          "y": 285,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "shortSrc": "https://dl.dropboxusercontent.com/u/5735957/gSpeak-mpg2.mp4",
+          "videoType": "html5",
+          "srcType": "video/mp4",
+          "selected": false
+        },
+        {
+          "src": "https://dl.dropboxusercontent.com/u/5735957/gSpeak-mpg4.mp4",
+          "type": "Video",
+          "x": 687,
+          "y": 295,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "shortSrc": "https://dl.dropboxusercontent.com/u/5735957/gSpeak-mpg4.mp4",
+          "videoType": "html5",
+          "srcType": "video/mp4",
+          "selected": false
+        },
+        {
+          "TextBox": {},
+          "x": 263,
+          "y": 202,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 72,
+          "text": "<font color=\"#333333\">mpg2</font>",
+          "selected": false
+        },
+        {
+          "TextBox": {},
+          "x": 725,
+          "y": 207,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 72,
+          "text": "<font color=\"#333333\">mpeg4</font>",
+          "selected": false
+        },
+        {
+          "src": "https://dl.dropboxusercontent.com/u/5735957/gSpeak-h264.mp4",
+          "type": "Video",
+          "x": 455,
+          "y": 567,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "shortSrc": "https://dl.dropboxusercontent.com/u/5735957/gSpeak-h264.mp4",
+          "videoType": "html5",
+          "srcType": "video/mp4",
+          "selected": false
+        },
+        {
+          "TextBox": {},
+          "x": 281,
+          "y": 599,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 72,
+          "text": "<font color=\"#333333\">h264</font>",
+          "selected": false
+        }
+      ],
+      "z": 0,
+      "impScale": 3,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0,
+      "index": 17,
+      "selected": true,
+      "active": true,
+      "x": 1960,
+      "y": 462
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 180,
+          "y": 341,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 72,
+          "text": "<font>Das sieht ja cool aus...</font>",
+          "selected": false
+        }
+      ],
+      "z": 0,
+      "impScale": 3,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0,
+      "index": 18,
+      "selected": false,
+      "active": false,
+      "x": 1723,
+      "y": 463
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 38,
+          "y": 300,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 72,
+          "text": "<div style=\"text-align: center;\"></div><font>Oft <b>direkt</b> mit <b>Händen</b> bedient<br></font>",
+          "selected": false
+        }
+      ],
+      "z": 0,
+      "impScale": 5,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0,
+      "index": 19,
+      "selected": false,
+      "active": false,
+      "x": 2416,
+      "y": 585
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 42,
+          "y": 298,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 72,
+          "text": "<div style=\"text-align: center;\">Problem</div><font>Neue Interaktionsparadigmen<br></font>",
+          "selected": false
+        }
+      ],
+      "z": 0,
+      "impScale": 3,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0,
+      "index": 20,
+      "selected": false,
+      "active": false,
+      "x": 2657,
+      "y": 463
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 258,
+          "y": 298,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 72,
+          "text": "<font>Fullscreen in<br>Android Kitkat...</font>",
+          "selected": false
+        }
+      ],
+      "z": 0,
+      "impScale": 3,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0,
+      "index": 21,
+      "selected": false,
+      "active": false,
+      "x": 2896,
+      "y": 462
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 196,
+          "y": 124,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 72,
+          "text": "<div style=\"text-align: left;\">Wie</div><div style=\"text-align: left;\">komme</div><div style=\"text-align: left;\">ich&nbsp;</div><div style=\"text-align: left;\">hier</div><div style=\"text-align: left;\">wieder</div><div style=\"text-align: left;\">raus?...</div>",
+          "selected": false
+        }
+      ],
+      "z": 0,
+      "impScale": 3,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0,
+      "index": 22,
+      "selected": false,
+      "active": false,
+      "x": 3095,
+      "y": 462,
+      "background": "img:http://i.imgur.com/ZDFp7Qv.png"
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 292,
+          "y": 85,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 72,
+          "text": "<font>Ganz <i>natürlich</i></font>",
+          "selected": false
+        }
+      ],
+      "z": 0,
+      "impScale": 4,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0,
+      "index": 23,
+      "selected": false,
+      "active": false,
+      "x": 3364,
+      "y": 488,
+      "background": "img:http://i.imgur.com/yq1Vl7b.png"
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 341,
+          "y": 298,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 72,
+          "text": "<font>Fullscreen<br>in gSpeak...<br></font>",
+          "selected": false
+        }
+      ],
+      "z": 0,
+      "impScale": 3,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 3.14,
+      "index": 24,
+      "selected": false,
+      "active": false,
+      "x": 3347,
+      "y": 675
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 90,
+          "y": 341,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 72,
+          "text": "<font>Wie komme ich <b>hier</b>&nbsp;raus?...</font>",
+          "selected": false
+        }
+      ],
+      "z": 0,
+      "impScale": 3,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 3.14,
+      "index": 25,
+      "selected": false,
+      "active": false,
+      "surface": "bg-surf-grad-orange",
+      "x": 3110,
+      "y": 679
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 236,
+          "y": 298,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 72,
+          "text": "<div style=\"text-align: center;\">Ganz natürlich</div><font>per divide &amp; unite<br></font>",
+          "selected": false
+        }
+      ],
+      "z": 0,
+      "impScale": 3,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 3.14,
+      "index": 26,
+      "selected": false,
+      "active": false,
+      "x": 2872,
+      "y": 673
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 416,
+          "y": 380,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 48,
+          "text": "<div style=\"text-align: center;\">User<br></div><font><div style=\"text-align: center;\">Interface</div></font>",
+          "selected": false
+        },
+        {
+          "TextBox": {},
+          "x": 432,
+          "y": 326,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 48,
+          "text": "<font color=\"#eeeeee\">Natural<br><br></font>",
+          "selected": false
+        }
+      ],
+      "z": 0,
+      "impScale": 3,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 3.14,
+      "index": 27,
+      "selected": false,
+      "active": false,
+      "x": 3132,
+      "y": 871,
+      "surface": "bg-surf-grad-yellow"
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 119,
+          "y": 298,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 72,
+          "text": "<div style=\"text-align: center;\">Wir nutzen unser Wissen</div><font><div style=\"text-align: center;\">aus der <b>natürlichen</b> Welt</div></font>",
+          "selected": false
+        }
+      ],
+      "z": 0,
+      "impScale": 3,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 3.14,
+      "index": 28,
+      "selected": false,
+      "active": false,
+      "x": 3134,
+      "y": 961
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 53,
+          "y": 341,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 72,
+          "text": "Interaktion ist <b>nicht</b>&nbsp;natürlich<br>",
+          "selected": false
+        }
+      ],
+      "z": 0,
+      "impScale": 3,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0,
+      "index": 29,
+      "selected": false,
+      "active": false,
+      "x": 3132,
+      "y": 980
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 88,
+          "y": 341,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 72,
+          "text": "<font>Interakation <b>wird</b>&nbsp;natürlich<br></font>",
+          "selected": false
+        }
+      ],
+      "z": 0,
+      "impScale": 3,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0,
+      "index": 30,
+      "selected": false,
+      "active": false,
+      "x": 3364,
+      "y": 872
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 216,
+          "y": 298,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 72,
+          "text": "<font>Weg mit indirekter<br>Tastatur &amp; Mouse</font>",
+          "selected": false
+        }
+      ],
+      "z": 0,
+      "impScale": 3,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0,
+      "index": 31,
+      "selected": false,
+      "active": false,
+      "x": 2898,
+      "y": 872
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 239,
+          "y": 298,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 72,
+          "text": "Input und Output<br><div style=\"text-align: center;\">werden</div>",
+          "selected": false
+        }
+      ],
+      "z": 0,
+      "impScale": 3,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0,
+      "index": 32,
+      "selected": false,
+      "active": false,
+      "x": 2665,
+      "y": 873
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 426,
+          "y": 355,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 48,
+          "text": "direkter",
+          "selected": false
+        }
+      ],
+      "z": 0,
+      "impScale": 10,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0,
+      "index": 33,
+      "selected": false,
+      "active": false,
+      "x": 2592,
+      "y": 1625
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 400,
+          "y": 355,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 48,
+          "text": "<font color=\"#333333\">vielfältiger</font>",
+          "selected": false
+        }
+      ],
+      "z": 0,
+      "impScale": 3,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0,
+      "index": 34,
+      "selected": false,
+      "active": false,
+      "x": 260,
+      "y": 969
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 388,
+          "y": 341,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 72,
+          "text": "<font>2. Technik</font>",
+          "selected": false
+        }
+      ],
+      "z": 0,
+      "impScale": 3,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0,
+      "index": 35,
+      "selected": false,
+      "active": false,
+      "x": 2749,
+      "y": 2166,
+      "surface": "bg-surf-grad-yellow"
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 244,
+          "y": 341,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 72,
+          "text": "<font>Let's Talk about...</font>",
+          "selected": false
+        }
+      ],
+      "z": 0,
+      "impScale": 3,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0,
+      "index": 36,
+      "selected": false,
+      "active": false,
+      "x": 2747,
+      "y": 2258
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 316,
+          "y": 298,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 144,
+          "text": "<font>Touch</font>",
+          "selected": false
+        }
+      ],
+      "z": 0,
+      "impScale": 3,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0,
+      "index": 37,
+      "selected": false,
+      "active": false,
+      "x": 2741,
+      "y": 2359,
+      "background": "bg-transparent",
+      "surface": "bg-default"
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 101,
+          "y": 298,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 72,
+          "text": "<font>Beim iPhone ist noch nicht<br><div style=\"text-align: center;\">Schluss</div></font>",
+          "selected": false
+        }
+      ],
+      "z": 0,
+      "impScale": 3,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0,
+      "index": 38,
+      "selected": false,
+      "active": false,
+      "x": 2513,
+      "y": 2285
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 341.3333333333333,
+          "y": 256,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 72,
+          "text": "<div style=\"text-align: center;\">TouchScreen</div><font><div style=\"text-align: center;\">ist nicht gleich</div><div style=\"text-align: center;\">TouchScreen</div></font>",
+          "selected": false
+        }
+      ],
+      "z": 0,
+      "impScale": 3,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0,
+      "index": 39,
+      "selected": false,
+      "active": false,
+      "x": 2991,
+      "y": 2261
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 79,
+          "y": 85,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 48,
+          "text": "<font color=\"#333333\">Resistiv</font>",
+          "selected": false,
+          "rotate": -1.57
+        },
+        {
+          "TextBox": {},
+          "x": 722,
+          "y": 564,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 48,
+          "text": "<font color=\"#333333\">Nintendo3Ds</font>",
+          "selected": false,
+          "rotate": 1.57
+        }
+      ],
+      "z": 0,
+      "impScale": 3,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0,
+      "index": 40,
+      "selected": false,
+      "active": false,
+      "x": 2764,
+      "y": 1997,
+      "background": "img:http://i.imgur.com/toUFpzS.png"
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": -105,
+          "y": 105,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 72,
+          "text": "<font>Kapazitiv</font>",
+          "selected": false,
+          "rotate": -1.57
+        },
+        {
+          "TextBox": {},
+          "x": 876,
+          "y": 530,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 72,
+          "text": "<font>iPhone uvm.</font>",
+          "selected": false,
+          "rotate": 1.57
+        }
+      ],
+      "z": 0,
+      "impScale": 3,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0,
+      "index": 41,
+      "selected": false,
+      "active": false,
+      "x": 12220,
+      "y": 2140,
+      "background": "img:http://www.tci.de/uploads/pics/image_touch-kapazitiv.jpg"
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": -197,
+          "y": 247,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 72,
+          "text": "<font>(Elektro-Magnetisch)<br><div style=\"text-align: center;\">Induktiv</div></font>",
+          "selected": false,
+          "rotate": -1.57
+        },
+        {
+          "TextBox": {},
+          "x": 721,
+          "y": 79,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 72,
+          "text": "<font>Wacom</font>",
+          "selected": false,
+          "rotate": 1.57
+        },
+        {
+          "TextBox": {},
+          "x": 646,
+          "y": 528,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 72,
+          "text": "<font>Galaxy Note</font>",
+          "selected": false,
+          "rotate": 1.57
+        }
+      ],
+      "z": 0,
+      "impScale": 3,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0,
+      "index": 42,
+      "selected": false,
+      "active": false,
+      "x": 12500,
+      "y": 2140,
+      "background": "img:http://i.imgur.com/qlUZ2fG.png"
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 124,
+          "y": -11,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 72,
+          "text": "<div style=\"text-align: center;\">Infrarot</div>",
+          "selected": false
+        }
+      ],
+      "z": 0,
+      "impScale": 3,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0,
+      "index": 43,
+      "selected": false,
+      "active": false,
+      "x": 12220,
+      "y": 2140,
+      "background": "img:http://i.imgur.com/cLAdxG1.png"
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 182,
+          "y": 341,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 72,
+          "text": "<font>Microsoft PixelSense</font>",
+          "selected": false
+        }
+      ],
+      "z": 0,
+      "impScale": 3,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0,
+      "index": 44,
+      "selected": false,
+      "active": false,
+      "x": 12500,
+      "y": 2140
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 410,
+          "y": 341,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "text": "<font>Kinect</font>",
+          "size": 72,
+          "selected": false
+        }
+      ],
+      "z": 0,
+      "impScale": 3,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0,
+      "index": 45,
+      "selected": false,
+      "active": false,
+      "x": 12780,
+      "y": 2140
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 282,
+          "y": 355,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 48,
+          "text": "<font color=\"#333333\">Warum so ausführlich?</font>",
+          "selected": false
+        }
+      ],
+      "z": 0,
+      "impScale": 3,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0,
+      "index": 46,
+      "selected": false,
+      "active": false,
+      "x": 13060,
+      "y": 2140
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 394,
+          "y": 295,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 48,
+          "text": "<div style=\"text-align: center;\">Weil NUI</div><font color=\"#333333\"><div style=\"text-align: center;\"><b>nicht</b> gleich</div><div style=\"text-align: center;\">NUI ist</div></font>",
+          "selected": false
+        }
+      ],
+      "z": 0,
+      "impScale": 3,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0,
+      "index": 47,
+      "selected": false,
+      "active": false,
+      "x": 13340,
+      "y": 2140
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 317,
+          "y": 326,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 48,
+          "text": "<div style=\"text-align: center;\">Viele Wege führen</div><font color=\"#333333\"><div style=\"text-align: center;\">zum natürlichen</div></font>",
+          "selected": false
+        }
+      ],
+      "z": 0,
+      "impScale": 3,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0,
+      "index": 48,
+      "selected": false,
+      "active": false,
+      "x": 13620,
+      "y": 2420
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 296,
+          "y": 355,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 48,
+          "text": "<font color=\"#333333\">Kein Weg ist Perfekt</font>",
+          "selected": false
+        }
+      ],
+      "z": 0,
+      "impScale": 3,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0,
+      "index": 49,
+      "selected": false,
+      "active": false,
+      "x": 13900,
+      "y": 2420
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 42,
+          "y": 341,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 72,
+          "text": "<font color=\"#333333\">Kommen wir zum spannenden</font>",
+          "selected": false
+        }
+      ],
+      "z": 0,
+      "impScale": 3,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0,
+      "index": 50,
+      "selected": false,
+      "active": false,
+      "x": 14180,
+      "y": 2420
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 341.3333333333333,
+          "y": 256,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 72,
+          "text": "<font color=\"#333333\">Let's talk about...</font>",
+          "selected": false
+        }
+      ],
+      "z": 0,
+      "impScale": 3,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0,
+      "index": 51,
+      "selected": false,
+      "active": false,
+      "x": 14460,
+      "y": 2420
+    },
+    {
+      "components": [
+        {
+          "TextBox": {},
+          "x": 341.3333333333333,
+          "y": 256,
+          "scale": {
+            "x": 1,
+            "y": 1
+          },
+          "type": "TextBox",
+          "size": 72,
+          "text": "<font color=\"#333333\">PixelSense</font>",
+          "selected": false
+        }
+      ],
+      "z": 0,
+      "impScale": 3,
+      "rotateX": 0,
+      "rotateY": 0,
+      "rotateZ": 0,
+      "index": 52,
+      "selected": false,
+      "active": false,
+      "x": 14740,
+      "y": 2420
+    }
+  ],
+  "background": "bg-transparent",
+  "activeSlide": {
+    "components": [
+      {
+        "TextBox": {},
+        "x": 275,
+        "y": 67,
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "type": "TextBox",
+        "text": "<font>Oblong gSpeak</font>",
+        "size": 72,
+        "selected": false
+      },
+      {
+        "src": "https://dl.dropboxusercontent.com/u/5735957/gSpeak-mpg2.mp4",
+        "type": "Video",
+        "x": 212,
+        "y": 285,
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "shortSrc": "https://dl.dropboxusercontent.com/u/5735957/gSpeak-mpg2.mp4",
+        "videoType": "html5",
+        "srcType": "video/mp4",
+        "selected": false
+      },
+      {
+        "src": "https://dl.dropboxusercontent.com/u/5735957/gSpeak-mpg4.mp4",
+        "type": "Video",
+        "x": 687,
+        "y": 295,
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "shortSrc": "https://dl.dropboxusercontent.com/u/5735957/gSpeak-mpg4.mp4",
+        "videoType": "html5",
+        "srcType": "video/mp4",
+        "selected": false
+      },
+      {
+        "TextBox": {},
+        "x": 263,
+        "y": 202,
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "type": "TextBox",
+        "size": 72,
+        "text": "<font color=\"#333333\">mpg2</font>",
+        "selected": false
+      },
+      {
+        "TextBox": {},
+        "x": 725,
+        "y": 207,
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "type": "TextBox",
+        "size": 72,
+        "text": "<font color=\"#333333\">mpeg4</font>",
+        "selected": false
+      },
+      {
+        "src": "https://dl.dropboxusercontent.com/u/5735957/gSpeak-h264.mp4",
+        "type": "Video",
+        "x": 455,
+        "y": 567,
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "shortSrc": "https://dl.dropboxusercontent.com/u/5735957/gSpeak-h264.mp4",
+        "videoType": "html5",
+        "srcType": "video/mp4",
+        "selected": false
+      },
+      {
+        "TextBox": {},
+        "x": 281,
+        "y": 599,
+        "scale": {
+          "x": 1,
+          "y": 1
+        },
+        "type": "TextBox",
+        "size": 72,
+        "text": "<font color=\"#333333\">h264</font>",
+        "selected": false
+      }
+    ],
+    "z": 0,
+    "impScale": 3,
+    "rotateX": 0,
+    "rotateY": 0,
+    "rotateZ": 0,
+    "index": 17,
+    "selected": true,
+    "active": true,
+    "x": 1960,
+    "y": 462
+  },
+  "fileName": "presentation-unnamed",
+  "deckVersion": "1.0",
+  "customBackgrounds": {
+    "bgs": [
+      {
+        "klass": "bg-custom-EEE",
+        "style": "#EEE"
+      }
+    ]
+  },
+  "overviewX": 7500,
+  "overviewY": 1252.5
+}

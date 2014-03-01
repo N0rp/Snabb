@@ -37,6 +37,8 @@ public class Browser extends Region {
     public final static String LOCAL_BORED = "res/web/bored/index.html";
     public final static String LOCAL_PRES = "res/web/temp/Deck Title.html";
 
+    public final static String LOCAL_INNOTALK = "res/web/innotalk/innotalk/index.html";
+
     private final WebView webview = new WebView();
     private final WebEngine webEngine = webview.getEngine();
 
@@ -54,6 +56,16 @@ public class Browser extends Region {
     }
 
     private int currentSlide = 1;
+
+    /**
+     * Enables Firebug Lite for debugging a webEngine.
+     * 
+     * @param engine
+     *            the webEngine for which debugging is to be enabled.
+     */
+    private static void enableFirebug(final WebEngine engine) {
+        engine.executeScript("if (!document.getElementById('FirebugLite')){E = document['createElement' + 'NS'] && document.documentElement.namespaceURI;E = E ? document['createElement' + 'NS'](E, 'script') : document['createElement']('script');E['setAttribute']('id', 'FirebugLite');E['setAttribute']('src', 'https://getfirebug.com/' + 'firebug-lite.js' + '#startOpened');E['setAttribute']('FirebugLite', '4');(document['getElementsByTagName']('head')[0] || document['getElementsByTagName']('body')[0]).appendChild(E);E = new Image;E['setAttribute']('src', 'https://getfirebug.com/' + '#startOpened');}");
+    }
 
     public Browser(String url, UrlLocation location) {
         // apply the styles
@@ -122,6 +134,13 @@ public class Browser extends Region {
                     // only called once loading is actually done
                     System.out.println("Page Load Done");
                     notifyPageLoadCompleteListeners();
+
+                    // java.util.logging.Logger.getLogger(javafx.scene.web.WebView.class.getName()).setLevel(
+                    // java.util.logging.Level.OFF);
+                    //
+                    // java.util.logging.Logger.getLogger(javafx.scene.web.WebEngine.class.getName()).setLevel(Level.OFF);
+
+                    // enableFirebug(webEngine);
 
                     Document doc = webEngine.getDocument();
                     Element el = doc.getElementById("impress");

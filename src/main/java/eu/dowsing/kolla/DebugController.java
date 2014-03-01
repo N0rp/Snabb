@@ -1,43 +1,42 @@
-package eu.dowsing.leap.brick.presentation;
+package eu.dowsing.kolla;
 
 import javafx.application.Platform;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import eu.dowsing.kolla.ScreenController;
 import eu.dowsing.kolla.leap.brick.ActiveMovementListener;
 import eu.dowsing.kolla.leap.brick.model.BrickGesture;
 import eu.dowsing.kolla.leap.brick.model.BrickGesture.GestureType;
-import eu.dowsing.leap.pres.Browser;
 
-public class PresentationController implements ActiveMovementListener, ScreenController {
+public class DebugController implements ScreenController, ActiveMovementListener {
 
-    private Browser browser;
     private Stage stage;
-    private boolean isActive;
+    private Text text;
+    private boolean active;
 
-    public PresentationController(Stage stage, Browser browser) {
+    public DebugController(Stage stage, Text text) {
         this.stage = stage;
-        this.browser = browser;
+        this.text = text;
     }
 
     @Override
     public void setActive(boolean active) {
-        isActive = active;
+        this.active = active;
     }
 
     @Override
     public boolean isActive() {
-        return isActive;
+        return active;
     }
 
     @Override
     public boolean onActiveMovement(BrickGesture gesture) {
-        if (isActive) {
+        if (isActive()) {
             if (gesture.getGestureType() == GestureType.LEFT2RIGHT
                     || gesture.getGestureType() == GestureType.ALMOST_LEFT2RIGHT) {
                 Platform.runLater(new Runnable() {
                     public void run() {
                         System.out.println("Gesture is left to right");
-                        browser.gotoPrevPage();
+                        text.setText("Left to Right");
                     }
                 });
                 return true;
@@ -46,7 +45,7 @@ public class PresentationController implements ActiveMovementListener, ScreenCon
                 Platform.runLater(new Runnable() {
                     public void run() {
                         System.out.println("Gesture is right to left");
-                        browser.gotoNextPage();
+                        text.setText("Right to Left");
                     }
                 });
                 return true;
@@ -54,6 +53,7 @@ public class PresentationController implements ActiveMovementListener, ScreenCon
                 Platform.runLater(new Runnable() {
                     public void run() {
                         System.out.println("Gesture is divide");
+                        text.setText("Divide");
                         stage.setFullScreen(true);
                     }
                 });
@@ -62,6 +62,7 @@ public class PresentationController implements ActiveMovementListener, ScreenCon
                 Platform.runLater(new Runnable() {
                     public void run() {
                         System.out.println("Gesture is unite");
+                        text.setText("Unite");
                         stage.setFullScreen(false);
                     }
                 });
@@ -69,7 +70,7 @@ public class PresentationController implements ActiveMovementListener, ScreenCon
             } else if (gesture.getGestureType() == GestureType.NONE) {
                 Platform.runLater(new Runnable() {
                     public void run() {
-
+                        text.setText("---");
                     }
                 });
                 return false;
