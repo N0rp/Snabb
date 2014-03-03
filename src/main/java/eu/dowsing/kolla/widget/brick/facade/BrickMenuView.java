@@ -11,10 +11,12 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBuilder;
+import eu.dowsing.kolla.widget.brick.ActiveMovementListener;
 import eu.dowsing.kolla.widget.brick.BrickMenuAdapterInterface;
+import eu.dowsing.kolla.widget.brick.NumberTypedListener;
+import eu.dowsing.kolla.widget.brick.control.BrickMenuController;
 import eu.dowsing.kolla.widget.brick.facade.BrickView.Importance;
 import eu.dowsing.kolla.widget.brick.model.BrickModel;
-import eu.dowsing.leap.pres.Browser;
 
 /**
  * Contains all visualizations for the leap motion control
@@ -39,10 +41,15 @@ public class BrickMenuView extends Pane {
     private Rectangle noadapter;
 
     private BrickMenuAdapterInterface adapter;
+    private BrickMenuController controller;
 
-    private Browser browser;
+    private List<ActiveMovementListener> activeMovementListener = new LinkedList<>();
+
+    private List<NumberTypedListener> numberTypedListener = new LinkedList<>();
 
     public BrickMenuView(int sceneWidth, int sceneHeight) {
+        this.controller = new BrickMenuController(this);
+
         this.sceneWidth = sceneHeight;
         this.sceneHeight = sceneHeight;
 
@@ -52,18 +59,10 @@ public class BrickMenuView extends Pane {
         getChildren().add(noadapter);
     }
 
-    public void setBrowser(Browser browser) {
-        this.browser = browser;
-    }
-
-    public void setCurrentStepText(String text) {
-        if (this.currentStep != null) {
-            if (browser != null) {
-                text += " - " + browser.getCompletion() + "%";
-            }
-            this.currentStep.setText(text);
-
-        }
+    @Override
+    public void resize(double width, double height) {
+        super.resize(width, height);
+        System.out.println("Resizing Brick Menu");
     }
 
     public void setCurrentKeyInputText(String text) {
@@ -215,11 +214,36 @@ public class BrickMenuView extends Pane {
             int miniRectY = rectY - miniRectHeight - rectMargin;
 
             for (int j = 0; j < rectCount; j++) {
-                horizRects.add(new BrickView(p, rectHeight, rectWidth, rectX, miniRectY, miniRectHeight, miniRectWidth));
+                horizRects
+                        .add(new BrickView(p, rectHeight, rectWidth, rectX, miniRectY, miniRectHeight, miniRectWidth));
                 rectX += rectWidth;
             }
             rectY -= (this.sceneWidth / rectCount);
             System.out.println("RectY is now: " + rectY);
         }
+    }
+
+    public void addActiveMovementListener(ActiveMovementListener listener) {
+        this.activeMovementListener.add(listener);
+    }
+
+    public void removeActiveMovementListener(ActiveMovementListener listener) {
+        this.activeMovementListener.remove(listener);
+    }
+
+    public List<ActiveMovementListener> getActiveMovementListeners() {
+        return this.activeMovementListener;
+    }
+
+    public void addNumberTypedListener(NumberTypedListener listener) {
+        this.numberTypedListener.add(listener);
+    }
+
+    public void removeNumberTypedListener(NumberTypedListener listener) {
+        this.numberTypedListener.remove(listener);
+    }
+
+    public List<NumberTypedListener> getNumberTypedListeners() {
+        return this.numberTypedListener;
     }
 }

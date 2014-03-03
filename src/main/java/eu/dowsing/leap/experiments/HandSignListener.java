@@ -1,4 +1,4 @@
-package eu.dowsing.kolla;
+package eu.dowsing.leap.experiments;
 
 import com.leapmotion.leap.Controller;
 import com.leapmotion.leap.Frame;

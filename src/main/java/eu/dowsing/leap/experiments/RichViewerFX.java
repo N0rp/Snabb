@@ -24,7 +24,7 @@
  * ---------------
  */
 
-package eu.dowsing.kolla;
+package eu.dowsing.leap.experiments;
 
 import java.io.File;
 import java.util.List;
@@ -66,8 +66,7 @@ import com.leapmotion.leap.Gesture;
 import com.sun.javafx.robot.FXRobot;
 import com.sun.javafx.robot.FXRobotFactory;
 
-import eu.dowsing.kolla.GesturesListener.Swipe;
-import eu.dowsing.leap.gesture.DoubleHandListener;
+import eu.dowsing.leap.experiments.GesturesListener.Swipe;
 
 public class RichViewerFX extends Application {
 
@@ -85,75 +84,73 @@ public class RichViewerFX extends Application {
         AUTO, WIDTH, HEIGHT;
     }
 
-    String                     PDFfile;
+    String PDFfile;
 
     // Variable to hold the current file/directory
-    File                       file;
+    File file;
 
     // These two variables are todo with PDF encryption & passwords
-    private String             password            = null;                    // Holds
-                                                                               // the
-                                                                               // password
-                                                                               // from
-                                                                               // the
-                                                                               // JVM
-                                                                               // or
-                                                                               // from
-                                                                               // User
-                                                                               // input
-    private boolean            closePasswordPrompt = false;                   // boolean
-                                                                               // controls
-                                                                               // whether
-                                                                               // or
-                                                                               // not
-                                                                               // we
-                                                                               // should
-                                                                               // close
-                                                                               // the
-                                                                               // prompt
-                                                                               // box
+    private String password = null; // Holds
+                                    // the
+                                    // password
+                                    // from
+                                    // the
+                                    // JVM
+                                    // or
+                                    // from
+                                    // User
+                                    // input
+    private boolean closePasswordPrompt = false; // boolean
+                                                 // controls
+                                                 // whether
+                                                 // or
+                                                 // not
+                                                 // we
+                                                 // should
+                                                 // close
+                                                 // the
+                                                 // prompt
+                                                 // box
 
     // Layout panes
-    private VBox               top;
-    private HBox               bottom;
-    private VBox               center;
-    private ScrollPane         sp;
+    private VBox top;
+    private HBox bottom;
+    private VBox center;
+    private ScrollPane sp;
     // Group is a container which holds the decoded PDF content
-    private Group              group;
+    private Group group;
 
     // displays "page x of y"
-    private Text               pageLoc;
+    private Text pageLoc;
     // for the location of the pdf file
-    private Text               fileLoc;
-    private Text               spacer;
+    private Text fileLoc;
+    private Text spacer;
 
-    private float              scale               = 1.0f;
+    private float scale = 1.0f;
 
-    private float[]            scalings            = { 0.01f, 0.1f, 0.25f,
-            0.5f, 0.75f, 1.0f, 1.25f, 1.5f, 2.0f, 4.0f, 7.5f, 10.0f };
+    private float[] scalings = { 0.01f, 0.1f, 0.25f, 0.5f, 0.75f, 1.0f, 1.25f, 1.5f, 2.0f, 4.0f, 7.5f, 10.0f };
 
-    private int                currentScaling      = 5;
+    private int currentScaling = 5;
 
-    private float              insetX              = 25;
+    private float insetX = 25;
 
-    private float              insetY              = 25;
+    private float insetY = 25;
 
-    private int                currentPage         = 1;
+    private int currentPage = 1;
 
-    Stage                      stage;
+    Stage stage;
 
-    Scene                      scene;
+    Scene scene;
 
     // Controls size of he stage, in theory setting this to a higher value will
     // increase image quality as there's more pixels due to higher image
     // resolutions
-    int                        FXscaling           = 1;
+    int FXscaling = 1;
 
-    private RichLeapListener   pointlistener       = new RichLeapListener();
-    private GesturesListener   gesturelistener     = new GesturesListener();
-    private HandSignListener   handSignlistener    = new HandSignListener();
-    private DoubleHandListener doubleListener      = new DoubleHandListener();
-    private Controller         leapController      = new Controller();
+    private RichLeapListener pointlistener = new RichLeapListener();
+    private GesturesListener gesturelistener = new GesturesListener();
+    private HandSignListener handSignlistener = new HandSignListener();
+    private Controller leapController = new Controller();
 
     public static void main(String[] args) {
         launch(args);
@@ -202,7 +199,6 @@ public class RichViewerFX extends Application {
         leapController.addListener(pointlistener);
         leapController.addListener(gesturelistener);
         leapController.addListener(handSignlistener);
-        leapController.addListener(doubleListener);
 
         leapController.enableGesture(Gesture.Type.TYPE_SWIPE);
 
@@ -211,43 +207,37 @@ public class RichViewerFX extends Application {
         // root.getChildren().add(circle);
         // final Scene scene = new Scene(root, 800, 600);
 
-        pointlistener.pointProperty().addListener(
-                new ChangeListener<Point2D>() {
+        pointlistener.pointProperty().addListener(new ChangeListener<Point2D>() {
+            @Override
+            public void changed(ObservableValue ov, Point2D t, final Point2D t1) {
+                Platform.runLater(new Runnable() {
                     @Override
-                    public void changed(ObservableValue ov, Point2D t,
-                            final Point2D t1) {
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
+                    public void run() {
 
-                            }
-                        });
                     }
                 });
-        gesturelistener.gestureProperty().addListener(
-                new ChangeListener<Swipe>() {
+            }
+        });
+        gesturelistener.gestureProperty().addListener(new ChangeListener<Swipe>() {
 
+            @Override
+            public void changed(ObservableValue<? extends Swipe> observable, Swipe oldValue, final Swipe newValue) {
+                Platform.runLater(new Runnable() {
                     @Override
-                    public void changed(
-                            ObservableValue<? extends Swipe> observable,
-                            Swipe oldValue, final Swipe newValue) {
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (newValue == Swipe.LEFT) {
-                                    FXRobot robot = FXRobotFactory
-                                            .createRobot(scene);
-                                    robot.keyPress(javafx.scene.input.KeyCode.LEFT);
-                                    openNextPage();
-                                } else if (newValue == Swipe.RIGHT) {
-                                    openPreviousPage();
-                                }
-                            }
-                        });
-
+                    public void run() {
+                        if (newValue == Swipe.LEFT) {
+                            FXRobot robot = FXRobotFactory.createRobot(scene);
+                            robot.keyPress(javafx.scene.input.KeyCode.LEFT);
+                            openNextPage();
+                        } else if (newValue == Swipe.RIGHT) {
+                            openPreviousPage();
+                        }
                     }
-
                 });
+
+            }
+
+        });
 
     }
 
@@ -313,9 +303,8 @@ public class RichViewerFX extends Application {
          */
         scene.widthProperty().addListener(new ChangeListener<Number>() {
             @Override
-            public void changed(
-                    ObservableValue<? extends Number> observableValue,
-                    Number oldSceneWidth, Number newSceneWidth) {
+            public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneWidth,
+                    Number newSceneWidth) {
 
                 fitToX(FitToPage.WIDTH);
 
@@ -324,9 +313,8 @@ public class RichViewerFX extends Application {
 
         scene.heightProperty().addListener(new ChangeListener<Number>() {
             @Override
-            public void changed(
-                    ObservableValue<? extends Number> observableValue,
-                    Number oldSceneHeight, Number newSceneHeight) {
+            public void changed(ObservableValue<? extends Number> observableValue, Number oldSceneHeight,
+                    Number newSceneHeight) {
 
                 fitToX(FitToPage.HEIGHT);
 
@@ -437,8 +425,7 @@ public class RichViewerFX extends Application {
                 }
 
                 // Set extension filter
-                FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter(
-                        "PDF files (*.pdf)", "*.pdf");
+                FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("PDF files (*.pdf)", "*.pdf");
                 chooser.getExtensionFilters().add(extFilter);
 
                 file = chooser.showOpenDialog(null);
@@ -684,8 +671,7 @@ public class RichViewerFX extends Application {
         final Stage enterPasswordStage = new Stage();
         Button okButton = new Button("Ok");
         Text titleText = new Text("Password Request");
-        final TextField inputPasswordField = new TextField(
-                "Please Enter Password");
+        final TextField inputPasswordField = new TextField("Please Enter Password");
 
         // If the user has attempted to enter the password more than once,
         // change the text
@@ -696,8 +682,7 @@ public class RichViewerFX extends Application {
 
         // Setup the password prompt & add children
         enterPasswordStage.initModality(Modality.WINDOW_MODAL);
-        enterPasswordStage.setScene(new Scene(VBoxBuilder.create()
-                .children(titleText, inputPasswordField, okButton)
+        enterPasswordStage.setScene(new Scene(VBoxBuilder.create().children(titleText, inputPasswordField, okButton)
                 .alignment(Pos.CENTER).padding(new Insets(10)).build()));
 
         // If the Ok button is pressed, store the user input as the password
@@ -775,8 +760,7 @@ public class RichViewerFX extends Application {
                 scale = (width - insetX - insetX) / pageW;
             }
         } else if (fitToPage == FitToPage.HEIGHT) {
-            float height = (float) (scene.getHeight()
-                    - top.getBoundsInLocal().getHeight() - bottom.getHeight());
+            float height = (float) (scene.getHeight() - top.getBoundsInLocal().getHeight() - bottom.getHeight());
 
             if (rotation == 90 || rotation == 270) {
                 scale = (height - insetY - insetY) / pageW;

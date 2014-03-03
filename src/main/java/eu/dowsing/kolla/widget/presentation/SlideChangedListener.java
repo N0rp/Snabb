@@ -1,4 +1,4 @@
-package eu.dowsing.leap.pres;
+package eu.dowsing.kolla.widget.presentation;
 
 public interface SlideChangedListener {
 

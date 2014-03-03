@@ -1,18 +1,13 @@
 package eu.dowsing.kolla.widget.brick.control;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
 import javafx.application.Platform;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.event.EventHandler;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.stage.Stage;
 
 import com.leapmotion.leap.CircleGesture;
 import com.leapmotion.leap.Controller;
@@ -22,10 +17,11 @@ import com.leapmotion.leap.GestureList;
 import com.leapmotion.leap.Hand;
 import com.leapmotion.leap.HandList;
 import com.leapmotion.leap.KeyTapGesture;
-import com.leapmotion.leap.Listener;
 import com.leapmotion.leap.Screen;
 import com.leapmotion.leap.ScreenTapGesture;
 
+import eu.dowsing.kolla.app.AppSwitcher;
+import eu.dowsing.kolla.widget.WidgetInterface;
 import eu.dowsing.kolla.widget.brick.ActiveMovementListener;
 import eu.dowsing.kolla.widget.brick.BrickMenuAdapterInterface;
 import eu.dowsing.kolla.widget.brick.NumberTypedListener;
@@ -34,10 +30,12 @@ import eu.dowsing.kolla.widget.brick.facade.BrickView.Importance;
 import eu.dowsing.kolla.widget.brick.model.BrickGesture;
 import eu.dowsing.kolla.widget.brick.model.BrickModel;
 
-public class BrickMenuController extends Listener implements Runnable, EventHandler<KeyEvent> {
+public class BrickMenuController implements WidgetInterface, EventHandler<KeyEvent> {
 
     /** NO ID FOUND is equal to -1. **/
     private final static int NO_ID = -1;
+
+    private Scene sceneBuffer;
 
     // private ObjectProperty<Point2D> point = new SimpleObjectProperty<>();
 
@@ -87,17 +85,11 @@ public class BrickMenuController extends Listener implements Runnable, EventHand
     /** If true a gesture has been recognized and the hands need to be reset into non-active by the user. **/
     private boolean activeGestureResponse = false;
 
-    private List<ActiveMovementListener> activeMovementListener = new LinkedList<>();
-
-    private List<NumberTypedListener> numberTypedListener = new LinkedList<>();
-
     private BrickMenuView view;
 
     private BrickMenuAdapterInterface adapter;
 
     private BrickGesture gesture = new BrickGesture();
-
-    private Controller leapController;
 
     /** Time in milliseconds to wait before clearing pressed keys. **/
     private final static int KEY_PRESS_CLEAR_THRESHOLD = 1000;
@@ -110,20 +102,12 @@ public class BrickMenuController extends Listener implements Runnable, EventHand
     /** Stores when the most recent key press order started. **/
     private long keyPressStart = 0;
 
-    private ScheduledExecutorService executorService;
-
-    private Stage stage;
-
-    public BrickMenuController(Controller controller, Stage stage, BrickMenuView view,
-            BrickMenuAdapterInterface adapter, ScheduledExecutorService executorService) {
-        this.leapController = controller;
-        this.stage = stage;
+    public BrickMenuController(BrickMenuView view) {
         this.view = view;
-        this.adapter = adapter;
-        this.executorService = executorService;
     }
 
-    public void run() {
+    @Override
+    public void onSchedule(AppSwitcher appSwitcher, long scheduleSeconds) {
 
         // make sure the key presses are cleared
         if (System.currentTimeMillis() - keyPressStart > KEY_PRESS_CLEAR_THRESHOLD) {
@@ -137,6 +121,8 @@ public class BrickMenuController extends Listener implements Runnable, EventHand
             });
         }
 
+        Controller leapController = appSwitcher.getLeapController();
+
         if (!leapController.isConnected() || leapController.frame().hands().count() == 0) {
             Platform.runLater(new Runnable() {
 
@@ -146,9 +132,6 @@ public class BrickMenuController extends Listener implements Runnable, EventHand
                 }
             });
         }
-
-        // schedule itself to be run again
-        executorService.schedule(this, 1, TimeUnit.SECONDS);
     }
 
     /**
@@ -184,10 +167,8 @@ public class BrickMenuController extends Listener implements Runnable, EventHand
         }
     }
 
-    private Scene sceneBuffer;
-
     @Override
-    public void handle(KeyEvent event) {
+    public void onKeyboardEvent(KeyEvent event) {
         // here we handle all keyboard events
 
         int digit = getDigit(event.getCode());
@@ -239,7 +220,7 @@ public class BrickMenuController extends Listener implements Runnable, EventHand
     }
 
     @Override
-    public void onFrame(Controller controller) {
+    public void onLeapFrame(Controller controller) {
         Frame frame = controller.frame();
         if (!frame.hands().isEmpty()) {
             Screen screen = controller.locatedScreens().get(0);
@@ -469,14 +450,6 @@ public class BrickMenuController extends Listener implements Runnable, EventHand
         return secondary;
     }
 
-    public void addActiveMovementListener(ActiveMovementListener listener) {
-        this.activeMovementListener.add(listener);
-    }
-
-    public void removeActiveMovementListener(ActiveMovementListener listener) {
-        this.activeMovementListener.remove(listener);
-    }
-
     /**
      * Notifies listeners and returns if at most one of them has handled the gesture.
      * 
@@ -484,7 +457,7 @@ public class BrickMenuController extends Listener implements Runnable, EventHand
      */
     private boolean notifyActiveMovementListener() {
         boolean handled = false;
-        for (ActiveMovementListener listener : this.activeMovementListener) {
+        for (ActiveMovementListener listener : view.getActiveMovementListeners()) {
             handled |= listener.onActiveMovement(gesture);
             if (handled) {
                 // only allow the first listener to handle gesture
@@ -494,17 +467,21 @@ public class BrickMenuController extends Listener implements Runnable, EventHand
         return handled;
     }
 
-    public void addNumberTypedListener(NumberTypedListener listener) {
-        this.numberTypedListener.add(listener);
-    }
-
-    public void removeNumberTypedListener(NumberTypedListener listener) {
-        this.numberTypedListener.remove(listener);
-    }
-
     private void notifyNumberTypedListener(int number, boolean isSubmitted) {
-        for (NumberTypedListener listener : this.numberTypedListener) {
+        for (NumberTypedListener listener : view.getNumberTypedListeners()) {
             listener.onNumberUpdate(number, isSubmitted);
         }
+    }
+
+    @Override
+    public void handle(KeyEvent event) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public Node getNode() {
+        // TODO Auto-generated method stub
+        return null;
     }
 }

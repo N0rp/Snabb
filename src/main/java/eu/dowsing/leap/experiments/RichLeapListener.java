@@ -1,4 +1,4 @@
-package eu.dowsing.kolla;
+package eu.dowsing.leap.experiments;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;

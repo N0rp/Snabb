@@ -1,4 +1,4 @@
-package eu.dowsing.kolla;
+package eu.dowsing.leap.experiments;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -15,7 +15,7 @@ import com.leapmotion.leap.Screen;
 import com.leapmotion.leap.SwipeGesture;
 import com.leapmotion.leap.Vector;
 
-public class SimpleLeapListener extends Listener {
+public class SuperSimpleLeapListener extends Listener {
 
     public enum Direction {
         LEFT, RIGHT

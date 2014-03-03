@@ -1,4 +1,4 @@
-package eu.dowsing.kolla;
+package eu.dowsing.leap.experiments;
 
 public interface ScreenController {
 

@@ -1,6 +1,6 @@
 package eu.dowsing.leap.brick.presentation;
 
-import eu.dowsing.kolla.leap.brick.BrickMenuAdapterInterface;
+import eu.dowsing.kolla.widget.brick.BrickMenuAdapterInterface;
 
 public class BasicMenuAdapter implements BrickMenuAdapterInterface {
 

@@ -1,4 +1,4 @@
-package eu.dowsing.leap.pres;
+package eu.dowsing.kolla.widget.presentation.view;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -30,30 +30,24 @@ import org.w3c.dom.events.EventListener;
 import org.w3c.dom.events.EventTarget;
 import org.w3c.dom.html.HTMLDivElement;
 
-public class Browser extends Region {
+import eu.dowsing.kolla.widget.presentation.PageLoadCompleteListener;
+import eu.dowsing.kolla.widget.presentation.PresentationAdapterInterface;
+import eu.dowsing.kolla.widget.presentation.SlideChangedListener;
+import eu.dowsing.kolla.widget.presentation.control.PresentationController;
+import eu.dowsing.kolla.widget.presentation.model.PresentationAdapter.UrlLocation;
 
-    public final static String WEB_BORED = "http://bartaz.github.io/impress.js/#/bored";
-    public final static String WEB_STRUT = "http://strut.io/editor/#";
-    public final static String LOCAL_BORED = "res/web/bored/index.html";
-    public final static String LOCAL_PRES = "res/web/temp/Deck Title.html";
-
-    public final static String LOCAL_INNOTALK = "res/web/innotalk/innotalk/index.html";
+public class PresentationView extends Region {
 
     private final WebView webview = new WebView();
     private final WebEngine webEngine = webview.getEngine();
+
+    private PresentationController controller;
+    private PresentationAdapterInterface adapter;
 
     private List<SlideChangedListener> slideChangedListener = new LinkedList<>();
     private List<PageLoadCompleteListener> pageLoadCompleteListener = new LinkedList<>();
 
     private int maxStepFound = 1;
-
-    /** the url location **/
-    public enum UrlLocation {
-        /** local file system **/
-        Local,
-        /** on the web **/
-        Web
-    }
 
     private int currentSlide = 1;
 
@@ -67,7 +61,21 @@ public class Browser extends Region {
         engine.executeScript("if (!document.getElementById('FirebugLite')){E = document['createElement' + 'NS'] && document.documentElement.namespaceURI;E = E ? document['createElement' + 'NS'](E, 'script') : document['createElement']('script');E['setAttribute']('id', 'FirebugLite');E['setAttribute']('src', 'https://getfirebug.com/' + 'firebug-lite.js' + '#startOpened');E['setAttribute']('FirebugLite', '4');(document['getElementsByTagName']('head')[0] || document['getElementsByTagName']('body')[0]).appendChild(E);E = new Image;E['setAttribute']('src', 'https://getfirebug.com/' + '#startOpened');}");
     }
 
-    public Browser(String url, UrlLocation location) {
+    public PresentationView(String url, UrlLocation location) {
+        this.controller = new PresentationController();
+        initView(url, location);
+        initControl();
+    }
+
+    public void setCurrentStepText(String text) {
+
+    }
+
+    public void setAdapter(PresentationAdapterInterface adapter) {
+        this.adapter = adapter;
+    }
+
+    private void initView(String url, UrlLocation location) {
         // apply the styles
         getStyleClass().add("browser");
         if (location == UrlLocation.Local) {
@@ -81,8 +89,6 @@ public class Browser extends Region {
         // loadFile(LOCAL_PRES);
         // add the web view to the scene
         getChildren().add(webview);
-
-        setupListeners();
     }
 
     /**
@@ -111,7 +117,7 @@ public class Browser extends Region {
     /**
      * Setup the listeners for special events.
      */
-    private void setupListeners() {
+    private void initControl() {
         webview.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent keyEvent) {

@@ -1,4 +1,4 @@
-package eu.dowsing.kolla;
+package eu.dowsing.kolla.app.debug;
 
 import javafx.application.Platform;
 import javafx.scene.text.Text;
@@ -6,6 +6,7 @@ import javafx.stage.Stage;
 import eu.dowsing.kolla.widget.brick.ActiveMovementListener;
 import eu.dowsing.kolla.widget.brick.model.BrickGesture;
 import eu.dowsing.kolla.widget.brick.model.BrickGesture.GestureType;
+import eu.dowsing.leap.experiments.ScreenController;
 
 public class DebugController implements ScreenController, ActiveMovementListener {
 
